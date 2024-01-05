@@ -63,6 +63,7 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
                   return null;
                 },
                 onChanged: (value) => setState(() => _name = value),
+                textInputAction: TextInputAction.next,
               ),
               TextFormField(
                 decoration: const InputDecoration(
@@ -80,6 +81,7 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
                   return null;
                 },
                 onChanged: (value) => setState(() => _call = value),
+                textInputAction: TextInputAction.next,
               ),
               TextFormField(
                 decoration: const InputDecoration(
@@ -97,6 +99,7 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
                   return null;
                 },
                 onChanged: (value) => setState(() => _birth = value),
+                textInputAction: TextInputAction.done,
               ),
               FilledButton(
                 onPressed: _isProcessing

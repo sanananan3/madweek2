@@ -11,12 +11,14 @@ class UserData {
   final String call;
   final String birth;
   final String? kakaoId;
+  final DateTime date;
 
   const UserData({
     required this.id,
     required this.name,
     required this.call,
     required this.birth,
+    required this.date,
     this.userId,
     this.userPw,
     this.kakaoId,

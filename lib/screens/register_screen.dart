@@ -41,6 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   return null;
                 },
                 onChanged: (value) => setState(() => _id = value),
+                textInputAction: TextInputAction.next,
               ),
               TextFormField(
                 decoration: const InputDecoration(
@@ -58,6 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   return null;
                 },
                 onChanged: (value) => setState(() => _pw = value),
+                textInputAction: TextInputAction.next,
               ),
               TextFormField(
                 decoration: const InputDecoration(
@@ -78,6 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   }
                   return null;
                 },
+                textInputAction: TextInputAction.done,
               ),
               FilledButton(
                 onPressed: () async {
