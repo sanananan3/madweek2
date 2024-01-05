@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:madcamp_week2/models/user_data.dart';
+import 'package:madcamp_week2/screens/login_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  KakaoSdk.init(nativeAppKey: 'ff40012eb08456c0dae539112ecd7297');
+
   runApp(const MyApp());
 }
 
@@ -11,17 +19,39 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+      theme: _buildThemeData(),
+      home: const LoginScreen(),
+    );
+  }
+
+  ThemeData _buildThemeData() {
+    final base = ThemeData(
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      useMaterial3: true,
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
       ),
-      home: const MyHomePage(),
+    );
+
+    return base.copyWith(
+      appBarTheme: base.appBarTheme.copyWith(
+        backgroundColor: base.colorScheme.inversePrimary,
+      ),
+      textTheme: GoogleFonts.ibmPlexSansKrTextTheme(
+        base.textTheme.apply(bodyColor: Colors.black87),
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  final UserData user;
+
+  const MyHomePage({required this.user, super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -33,18 +63,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Week 2'),
-      ),
+      appBar: AppBar(title: const Text('Week 2')),
       body: IndexedStack(
         index: _currentIndex,
-        children: const [
-          Text('1'),
-          Text('2'),
-          Text('3'),
-          Text('4'),
-          Text('5'),
+        children: [
+          Text(widget.user.toJson().toString()),
+          const Text('2'),
+          const Text('3'),
+          const Text('4'),
+          const Text('5'),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
