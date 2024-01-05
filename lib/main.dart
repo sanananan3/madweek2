@@ -39,8 +39,30 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: IndexedStack(
         index: _currentIndex,
-        children: const [
-          Text('1'),
+        children: [
+          Container(
+            color: Colors.black87,
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                crossAxisSpacing: 8.0,
+                childAspectRatio: 8.0,
+                mainAxisSpacing: 2.0,
+              ),
+              itemCount: 4,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  color: const Color(0xFF2B2B2B),
+                  child: Center(
+                    child: Text(
+                      '$index',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
           Text('2'),
           Text('3'),
           Text('4'),
