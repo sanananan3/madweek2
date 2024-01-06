@@ -11,7 +11,8 @@ class Tab1 extends StatelessWidget {
 
   Widget build(BuildContext context) {
 
-    String formattedDate = DateFormat('yyyy년 mm월 dd일').format(user.date.toLocal());
+    String formattedDate = DateFormat('yyyy년 MM월 dd일에 가입함').format(user.date.toLocal());
+
 
 
     return MaterialApp(
@@ -28,24 +29,25 @@ class Tab1 extends StatelessWidget {
                 height: 80,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                        user.birth,
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.7),
-                          fontSize: 18,
+                          fontSize: 15,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
                       Text(
-                        user.userId != null? user.userId! : user.kakaoId!,
+                        user.name,
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontSize: 28,
+                          fontSize: 40,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
                         ),
                       ),
                     ],
@@ -53,24 +55,31 @@ class Tab1 extends StatelessWidget {
                 ],
               ),
               const SizedBox(
-                height: 80,
+                height: 30,
               ),
-              Text(
-                '$formattedDate',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white.withOpacity(0.7),
-                ),
+              Row(
+                children: [
+                  const Icon(Icons.calendar_month_outlined, color: Colors.white70),
+                  SizedBox(
+                    width: 10
+                  ),
+                  Text(
+                    '$formattedDate',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white.withOpacity(0.7),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 5,
               ),
               Text(
-                user.name,
+                 ' @ ' + (user.userId != null? user.userId! : user.kakaoId!),
                 style: TextStyle(
-                  fontSize: 42,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: Colors.white.withOpacity(0.8),
+                  fontSize: 17,
                 ),
               ),
               const SizedBox(
@@ -85,7 +94,7 @@ class Tab1 extends StatelessWidget {
                     backgroundColor: Color(0xFF1B33B),
                   ),
                     child: Text('팔로워',
-                      style: TextStyle(  color: Colors.black,),
+                      style: TextStyle(  color: Colors.white,),
 
                     ),
 
