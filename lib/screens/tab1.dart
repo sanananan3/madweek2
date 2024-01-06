@@ -29,7 +29,8 @@ class Tab1 extends StatelessWidget {
                 height: 80,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,48 +46,62 @@ class Tab1 extends StatelessWidget {
                       Text(
                         user.name,
                         style: TextStyle(
-                          fontSize: 40,
+                          fontSize: 35,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),
                       ),
                     ],
-                  )
+                  ),
+                  TextButton(
+                    onPressed: (){},
+
+                    style: TextButton.styleFrom(
+                      backgroundColor: Color(0xFF1F3641),
+                    ),
+                    child: Text('프로필 수정',
+                      style: TextStyle(  color: Colors.white,),
+
+                    ),
+
+                  ),
                 ],
               ),
               const SizedBox(
-                height: 30,
+                height: 10,
               ),
-              Row(
-                children: [
-                  const Icon(Icons.calendar_month_outlined, color: Colors.white70),
-                  SizedBox(
-                    width: 10
-                  ),
+
                   Text(
-                    '$formattedDate',
+                    ' @ ' + (user.userId != null? user.userId! : user.kakaoId!),
                     style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white.withOpacity(0.7),
+                      color: Colors.white.withOpacity(0.8),
+                      fontSize: 16,
                     ),
                   ),
-                ],
-              ),
+
+             Row(
+             children: [
               const SizedBox(
                 height: 5,
               ),
+              const Icon(Icons.calendar_month_outlined, color: Colors.white70),
+              SizedBox(
+                  width: 5
+              ),
               Text(
-                 ' @ ' + (user.userId != null? user.userId! : user.kakaoId!),
+                '$formattedDate',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
-                  fontSize: 17,
+                  fontSize: 15,
+                  color: Colors.white.withOpacity(0.7),
                 ),
               ),
+            ],
+          ),
               const SizedBox(
-                height: 30,
+                height: 20,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   TextButton(
                     onPressed: (){},
@@ -99,10 +114,14 @@ class Tab1 extends StatelessWidget {
                     ),
 
                   ),
+
+                  const SizedBox(
+                    width: 30,
+                  ),
                   TextButton(
                     onPressed: (){
 
-                    },style: TextButton.styleFrom(backgroundColor: Color(0xFF1F2123),
+                    },style: TextButton.styleFrom(backgroundColor: Color(0xFF1B33B),
                   ),
                     child: Text('팔로잉', style: TextStyle(color: Colors.white,
                     ),
