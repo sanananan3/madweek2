@@ -25,7 +25,7 @@ class AdditionalRegisterScreen extends StatefulWidget {
 
 class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
   final _dio = Dio(
-    BaseOptions(baseUrl: 'http://143.248.225.173:8000'),
+    BaseOptions(baseUrl: 'http://143.248.225.35:8000'),
   );
 
   final _formKey = GlobalKey<FormState>();

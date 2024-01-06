@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:madcamp_week2/models/user_data.dart';
 import 'package:madcamp_week2/screens/login_screen.dart';
+import 'screens/tab1.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,7 +69,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          Text(widget.user.toJson().toString()),
+          // tab 1
+          Tab1(user: widget.user),
           const Text('2'),
           const Text('3'),
           const Text('4'),
