@@ -26,8 +26,6 @@ class AdditionalRegisterScreen extends StatefulWidget {
 }
 
 class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
-  final _restClient = RestClient(Dio());
-
   final _formKey = GlobalKey<FormState>();
 
   bool _isProcessing = false;
@@ -70,7 +68,7 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
                 decoration: const InputDecoration(
                   labelText: '전화번호',
                 ),
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.phone,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '전화번호를 입력해주세요.';
@@ -88,7 +86,7 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
                 decoration: const InputDecoration(
                   labelText: '생년월일',
                 ),
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.datetime,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '생년월일을 입력해주세요.';
@@ -136,22 +134,34 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
   Future<void> _register() async {
     late UserResponse response;
 
-    switch (widget.type) {
-      case RegisterType.normal:
-        response = await _restClient.createUser({
-          'user_id': widget.data['user_id'],
-          'user_pw': widget.data['user_pw'],
-          'name': _name,
-          'call': _call,
-          'birth': _birth,
-        });
-      case RegisterType.kakao:
-        response = await _restClient.createUserByKakao({
-          'kakao_id': widget.data['kakao_id'],
-          'name': _name,
-          'call': _call,
-          'birth': _birth,
-        });
+    try {
+      switch (widget.type) {
+        case RegisterType.normal:
+          response = await restClient.createUser({
+            'user_id': widget.data['user_id'],
+            'user_pw': widget.data['user_pw'],
+            'name': _name,
+            'call': _call,
+            'birth': _birth,
+          });
+        case RegisterType.kakao:
+          response = await restClient.createUserByKakao({
+            'kakao_id': widget.data['kakao_id'],
+            'name': _name,
+            'call': _call,
+            'birth': _birth,
+          });
+      }
+    } on DioException catch (error) {
+      if (!context.mounted) return;
+
+      await showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('오류'),
+          content: Text(error.message!),
+        ),
+      );
     }
 
     if (response.success == null || !response.success!) return;

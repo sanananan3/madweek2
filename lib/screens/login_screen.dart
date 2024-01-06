@@ -1,7 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:madcamp_week2/main.dart';
+import 'package:madcamp_week2/rest_client.dart';
 import 'package:madcamp_week2/screens/additional_register_screen.dart';
 import 'package:madcamp_week2/screens/register_screen.dart';
 import 'package:madcamp_week2/widgets/kakao_login_button.dart';
@@ -15,6 +18,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+
+  String _message = '';
 
   String _id = '';
   String _pw = '';
@@ -73,10 +78,41 @@ class _LoginScreenState extends State<LoginScreen> {
                   onChanged: (value) => _pw = value,
                   textInputAction: TextInputAction.done,
                 ),
-                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Text(
+                    _message,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
                 FilledButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {}
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      try {
+                        final response = await restClient.getUser(
+                          {'user_id': _id, 'user_pw': _pw},
+                        );
+
+                        if (!context.mounted) return;
+
+                        await Navigator.pushAndRemoveUntil<void>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MyHomePage(user: response.user!),
+                          ),
+                          (route) => false,
+                        );
+                      } catch (error) {
+                        switch (error) {
+                          case DioException(:final response?)
+                              when response.statusCode == 401:
+                            setState(() => _message = '아이디 또는 비밀번호가 잘못되었습니다.');
+                          default:
+                            setState(() => _message = '알 수 없는 오류가 발생했습니다.');
+                        }
+                      }
+                    }
                   },
                   style: FilledButton.styleFrom(
                     fixedSize: const Size.fromWidth(183),
@@ -101,19 +137,45 @@ class _LoginScreenState extends State<LoginScreen> {
                 KakaoLoginButton(
                   onPressed: () async {
                     final user = await _loginWithKakaoTalk();
-                    if (user == null) return;
+                    if (user == null) {
+                      setState(() => _message = '알 수 없는 오류가 발생했습니다.');
+                      return;
+                    }
 
-                    if (!context.mounted) return;
+                    try {
+                      final response = await restClient.getUser(
+                        {'kakao_id': user.id},
+                      );
 
-                    await Navigator.push<void>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AdditionalRegisterScreen(
-                          type: RegisterType.kakao,
-                          data: {'kakao_id': user.id},
+                      if (!context.mounted) return;
+
+                      await Navigator.pushAndRemoveUntil<void>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              MyHomePage(user: response.user!),
                         ),
-                      ),
-                    );
+                        (route) => false,
+                      );
+                    } catch (error) {
+                      switch (error) {
+                        case DioException(:final response?)
+                            when response.statusCode == 401:
+                          if (!context.mounted) return;
+
+                          await Navigator.push<void>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AdditionalRegisterScreen(
+                                type: RegisterType.kakao,
+                                data: {'kakao_id': user.id},
+                              ),
+                            ),
+                          );
+                        default:
+                          setState(() => _message = '알 수 없는 오류가 발생했습니다.');
+                      }
+                    }
                   },
                 ),
               ],

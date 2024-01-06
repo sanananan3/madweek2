@@ -8,14 +8,16 @@ part 'rest_client.g.dart';
 
 @RestApi()
 abstract class RestClient {
-  factory RestClient(Dio dio) =>
-      _RestClient(dio, baseUrl: dotenv.env['SERVER_BASEURL']);
+  factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
   @POST('/register')
   Future<UserResponse> createUser(@Body() Map<String, dynamic> data);
 
   @POST('/kakaoregister')
   Future<UserResponse> createUserByKakao(@Body() Map<String, dynamic> data);
+
+  @POST('/login')
+  Future<UserResponse> getUser(@Body() Map<String, dynamic> data);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -31,3 +33,5 @@ class UserResponse {
 
   Map<String, dynamic> toJson() => _$UserResponseToJson(this);
 }
+
+final restClient = RestClient(Dio(), baseUrl: dotenv.env['SERVER_BASEURL']!);
