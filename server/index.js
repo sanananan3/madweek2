@@ -108,10 +108,9 @@ app.post('/verify', async (req, res) => {
   try {
     const { token } = req.body;
 
-    const result = await client.query(
-      'SELECT * FROM users WHERE user_id = $1',
-      [token]
-    );
+    const result = await client.query('SELECT * FROM users WHERE token = $1', [
+      token,
+    ]);
 
     if (result.rows.length == 0) {
       return res
