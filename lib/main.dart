@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:madcamp_week2/models/user_data.dart';
@@ -7,7 +8,9 @@ import 'package:madcamp_week2/screens/login_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  KakaoSdk.init(nativeAppKey: 'ff40012eb08456c0dae539112ecd7297');
+  await dotenv.load();
+
+  KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_NATIVE_KEY']);
 
   runApp(const MyApp());
 }

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:madcamp_week2/main.dart';
-import 'package:madcamp_week2/models/user_data.dart';
+import 'package:madcamp_week2/rest_client.dart';
 
 enum RegisterType {
   normal,
@@ -11,10 +11,12 @@ enum RegisterType {
 class AdditionalRegisterScreen extends StatefulWidget {
   final RegisterType type;
   final Map<String, dynamic> data;
+  final VoidCallback? onPrevPressed;
 
   const AdditionalRegisterScreen({
     required this.type,
     required this.data,
+    this.onPrevPressed,
     super.key,
   });
 
@@ -24,9 +26,7 @@ class AdditionalRegisterScreen extends StatefulWidget {
 }
 
 class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
-  final _dio = Dio(
-    BaseOptions(baseUrl: 'http://143.248.225.173:8000'),
-  );
+  final _restClient = RestClient(Dio());
 
   final _formKey = GlobalKey<FormState>();
 
@@ -41,6 +41,7 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('추가 정보 기입'),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
@@ -62,7 +63,7 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
                   }
                   return null;
                 },
-                onChanged: (value) => setState(() => _name = value),
+                onChanged: (value) => _name = value,
                 textInputAction: TextInputAction.next,
               ),
               TextFormField(
@@ -80,7 +81,7 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
                   }
                   return null;
                 },
-                onChanged: (value) => setState(() => _call = value),
+                onChanged: (value) => _call = value,
                 textInputAction: TextInputAction.next,
               ),
               TextFormField(
@@ -98,21 +99,32 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
                   }
                   return null;
                 },
-                onChanged: (value) => setState(() => _birth = value),
+                onChanged: (value) => _birth = value,
                 textInputAction: TextInputAction.done,
               ),
-              FilledButton(
-                onPressed: _isProcessing
-                    ? null
-                    : () {
-                        if (_formKey.currentState!.validate()) {
-                          _register().then(
-                            (_) => setState(() => _isProcessing = false),
-                          );
-                          setState(() => _isProcessing = true);
-                        }
-                      },
-                child: const Text('회원가입 완료'),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (widget.onPrevPressed != null)
+                    FilledButton(
+                      onPressed: widget.onPrevPressed,
+                      child: const Text('이전'),
+                    ),
+                  FilledButton(
+                    onPressed: _isProcessing
+                        ? null
+                        : () {
+                            if (_formKey.currentState!.validate()) {
+                              _register().then(
+                                (_) => setState(() => _isProcessing = false),
+                              );
+                              setState(() => _isProcessing = true);
+                            }
+                          },
+                    child: const Text('완료'),
+                  ),
+                ],
               ),
             ],
           ),
@@ -122,43 +134,33 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
   }
 
   Future<void> _register() async {
-    late Response<Map<String, dynamic>> response;
+    late UserResponse response;
 
     switch (widget.type) {
       case RegisterType.normal:
-        response = await _dio.post<Map<String, dynamic>>(
-          '/register',
-          data: {
-            'user_id': widget.data['user_id'],
-            'user_pw': widget.data['user_pw'],
-            'name': _name,
-            'call': _call,
-            'birth': _birth,
-          },
-        );
+        response = await _restClient.createUser({
+          'user_id': widget.data['user_id'],
+          'user_pw': widget.data['user_pw'],
+          'name': _name,
+          'call': _call,
+          'birth': _birth,
+        });
       case RegisterType.kakao:
-        response = await _dio.post<Map<String, dynamic>>(
-          '/kakaoregister',
-          data: {
-            'kakao_id': widget.data['kakao_id'],
-            'name': _name,
-            'call': _call,
-            'birth': _birth,
-          },
-        );
+        response = await _restClient.createUserByKakao({
+          'kakao_id': widget.data['kakao_id'],
+          'name': _name,
+          'call': _call,
+          'birth': _birth,
+        });
     }
 
-    if (response.data == null) return;
-    if (!(response.data!['success'] as bool)) return;
-
-    final user =
-        UserData.fromJson(response.data!['user'] as Map<String, dynamic>);
+    if (response.success == null || !response.success!) return;
 
     if (!context.mounted) return;
 
     await Navigator.pushAndRemoveUntil<void>(
       context,
-      MaterialPageRoute(builder: (context) => MyHomePage(user: user)),
+      MaterialPageRoute(builder: (context) => MyHomePage(user: response.user!)),
       (route) => false,
     );
   }
