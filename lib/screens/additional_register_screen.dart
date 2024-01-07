@@ -32,8 +32,8 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
   bool _isProcessing = false;
 
   String _name = '';
-  String _call = '';
-  String _birth = '';
+  String _phone = '';
+  String _birthDate = '';
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +80,7 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
                   }
                   return null;
                 },
-                onChanged: (value) => _call = value,
+                onChanged: (value) => _phone = value,
                 textInputAction: TextInputAction.next,
               ),
               TextFormField(
@@ -93,12 +93,12 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
                     return '생년월일을 입력해주세요.';
                   }
 
-                  if (value.length != 6) {
-                    return '생년월일은 6글자여야 합니다.';
+                  if (value.length != 8) {
+                    return '생년월일은 8글자여야 합니다.';
                   }
                   return null;
                 },
-                onChanged: (value) => _birth = value,
+                onChanged: (value) => _birthDate = value,
                 textInputAction: TextInputAction.done,
               ),
               const SizedBox(height: 16),
@@ -142,15 +142,15 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
             'user_id': widget.data['user_id'],
             'user_pw': widget.data['user_pw'],
             'name': _name,
-            'call': _call,
-            'birth': _birth,
+            'phone': _phone,
+            'birth_date': _birthDate,
           });
         case RegisterType.kakao:
           response = await restClient.createUserByKakao({
             'kakao_id': widget.data['kakao_id'],
             'name': _name,
-            'call': _call,
-            'birth': _birth,
+            'phone': _phone,
+            'birth_date': _birthDate,
           });
       }
     } on DioException catch (error) {
