@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:madcamp_week2/models/user_data.dart';
-import 'package:madcamp_week2/screens/tab1.dart';
+import 'package:madcamp_week2/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final UserData user;
@@ -20,8 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          // tab 1
-          Tab1(user: widget.user),
+          ProfileScreen(user: widget.user),
           const Text('2'),
           const Text('3'),
           const Text('4'),
@@ -30,12 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        selectedItemColor: Colors.deepPurple,
-        unselectedItemColor: Colors.black,
+        type: BottomNavigationBarType.fixed,
         onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+          setState(() => _currentIndex = index);
         },
         items: const [
           BottomNavigationBarItem(

@@ -15,7 +15,7 @@ Future<void> main() async {
 
   KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_NATIVE_KEY']);
 
-  //await secureStorage.deleteAll();
+  //await SecureStorage.instance.deleteAll();
   final token = await SecureStorage.readToken();
 
   UserData? user;
@@ -48,7 +48,11 @@ class MyApp extends StatelessWidget {
 
   ThemeData _buildThemeData() {
     final base = ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      colorScheme: const ColorScheme.dark(
+        primary: Colors.white,
+        surface: Color(0xFF1F1F1F),
+        background: Color(0xFF1F1F1F),
+      ),
       useMaterial3: true,
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
@@ -57,14 +61,22 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: Color(0xFF42A5F5),
+        foregroundColor: Colors.white,
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          backgroundColor: const Color(0xFF3A393C),
+          foregroundColor: Colors.white,
+        ),
+      ),
     );
 
     return base.copyWith(
-      appBarTheme: base.appBarTheme.copyWith(
-        backgroundColor: base.colorScheme.inversePrimary,
-      ),
+      iconTheme: base.iconTheme.copyWith(opacity: 0.7),
       textTheme: GoogleFonts.ibmPlexSansKrTextTheme(
-        base.textTheme.apply(bodyColor: Colors.black87),
+        base.textTheme.apply(bodyColor: Colors.white70),
       ),
     );
   }
