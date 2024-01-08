@@ -9,4 +9,6 @@ class SecureStorage {
 
   static Future<void> writeToken(String token) =>
       instance.write(key: 'token', value: token);
+
+  static Future<void> deleteToken() => instance.delete(key: 'token');
 }

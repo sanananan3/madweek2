@@ -6,8 +6,6 @@ import 'package:madcamp_week2/screens/additional_register_screen.dart';
 import 'package:madcamp_week2/screens/register_screen.dart';
 import 'package:madcamp_week2/widgets/kakao_login_button.dart';
 
-final _messageProvider = StateProvider<String>((ref) => '');
-
 class LoginScreen extends HookConsumerWidget {
   final _formKey = GlobalKey<FormState>();
 
@@ -15,6 +13,7 @@ class LoginScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final message = useState('');
     final idController = useTextEditingController();
     final pwController = useTextEditingController();
 
@@ -74,7 +73,7 @@ class LoginScreen extends HookConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.all(4),
                     child: Text(
-                      ref.watch(_messageProvider),
+                      message.value,
                       style: const TextStyle(color: Colors.red),
                     ),
                   ),
@@ -84,7 +83,7 @@ class LoginScreen extends HookConsumerWidget {
                         final id = idController.text;
                         final pw = pwController.text;
 
-                        ref.read(_messageProvider.notifier).state = await ref
+                        message.value = await ref
                                 .read(userNotifierProvider.notifier)
                                 .loginWithIdAndPassword(id, pw) ??
                             '';
@@ -101,7 +100,7 @@ class LoginScreen extends HookConsumerWidget {
                       await Navigator.push<void>(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const RegisterScreen(),
+                          builder: (context) => RegisterScreen(),
                         ),
                       );
                     },
@@ -112,7 +111,7 @@ class LoginScreen extends HookConsumerWidget {
                   ),
                   KakaoLoginButton(
                     onPressed: () async {
-                      ref.read(_messageProvider.notifier).state = await ref
+                      message.value = await ref
                               .read(userNotifierProvider.notifier)
                               .loginWithKakao((kakaoUser) async {
                             await Navigator.push<void>(

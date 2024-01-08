@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart' hide User;
 import 'package:madcamp_week2/providers/user.dart';
 import 'package:madcamp_week2/screens/home_screen.dart';
@@ -47,6 +47,11 @@ class MyApp extends ConsumerWidget {
         background: Color(0xFF1F1F1F),
       ),
       useMaterial3: true,
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+      dialogTheme: const DialogTheme(
+        actionsPadding: EdgeInsets.all(8),
+      ),
+      dividerTheme: const DividerThemeData(color: Colors.white70),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -57,6 +62,9 @@ class MyApp extends ConsumerWidget {
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: Color(0xFF42A5F5),
         foregroundColor: Colors.white,
+      ),
+      iconButtonTheme: const IconButtonThemeData(
+        style: ButtonStyle(visualDensity: VisualDensity.compact),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(

@@ -1,6 +1,7 @@
 const {
   bigint,
   date,
+  integer,
   pgTable,
   serial,
   text,
@@ -17,5 +18,12 @@ exports.users = pgTable('users', {
   name: varchar('name', { length: 10 }).notNull(),
   phone: varchar('phone', { length: 20 }).notNull().unique(),
   birth_date: date('birth_date').notNull(),
+  created_at: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+exports.tweets = pgTable('tweets', {
+  id: serial('id').primaryKey(),
+  content: text('content').notNull(),
+  user_id: integer('user_id').notNull(),
   created_at: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });

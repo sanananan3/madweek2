@@ -1,25 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:madcamp_week2/screens/additional_register_screen.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
-
-  @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
-}
-
-class _RegisterScreenState extends State<RegisterScreen> {
+class RegisterScreen extends HookConsumerWidget {
   final _formKey = GlobalKey<FormState>();
 
-  int _currentIndex = 0;
-
-  String _id = '';
-  String _pw = '';
+  RegisterScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentIndex = useState(0);
+    final idController = useTextEditingController();
+    final pwController = useTextEditingController();
+
     return IndexedStack(
-      index: _currentIndex,
+      index: currentIndex.value,
       children: [
         Scaffold(
           appBar: AppBar(
@@ -34,6 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   TextFormField(
+                    controller: idController,
                     decoration: const InputDecoration(
                       labelText: '아이디',
                     ),
@@ -52,10 +49,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                       return null;
                     },
-                    onChanged: (value) => _id = value,
                     textInputAction: TextInputAction.next,
                   ),
                   TextFormField(
+                    controller: pwController,
                     decoration: const InputDecoration(
                       labelText: '비밀번호',
                     ),
@@ -70,7 +67,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       }
                       return null;
                     },
-                    onChanged: (value) => _pw = value,
                     textInputAction: TextInputAction.next,
                   ),
                   TextFormField(
@@ -87,7 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         return '8글자 이상 입력해주세요.';
                       }
 
-                      if (value != _pw) {
+                      if (value != pwController.text) {
                         return '비밀번호가 일치하지 않습니다.';
                       }
                       return null;
@@ -105,7 +101,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       FilledButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            setState(() => _currentIndex = 1);
+                            currentIndex.value = 1;
                           }
                         },
                         child: const Text('다음'),
@@ -118,14 +114,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
         PopScope(
-          canPop: _currentIndex != 1,
+          canPop: currentIndex.value != 1,
           onPopInvoked: (didPop) {
-            if (!didPop) setState(() => _currentIndex = 0);
+            if (!didPop) {
+              currentIndex.value = 0;
+            }
           },
           child: AdditionalRegisterScreen(
             type: RegisterType.normal,
-            data: {'user_id': _id, 'user_pw': _pw},
-            onPrevPressed: () => setState(() => _currentIndex = 0),
+            data: {'user_id': idController.text, 'user_pw': pwController.text},
+            onPrevPressed: () => currentIndex.value = 0,
           ),
         ),
       ],

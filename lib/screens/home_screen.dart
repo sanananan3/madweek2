@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:madcamp_week2/screens/profile_screen.dart';
 
-final _currentIndexProvider = StateProvider<int>((ref) => 0);
-
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentIndex = ref.watch(_currentIndexProvider);
+    final currentIndex = useState(0);
 
     return Scaffold(
       body: IndexedStack(
-        index: currentIndex,
+        index: currentIndex.value,
         children: const [
           ProfileScreen(),
           Text('2'),
@@ -23,10 +22,9 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
+        currentIndex: currentIndex.value,
         type: BottomNavigationBarType.fixed,
-        onTap: (index) =>
-            ref.read(_currentIndexProvider.notifier).state = index,
+        onTap: (index) => currentIndex.value = index,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.abc),

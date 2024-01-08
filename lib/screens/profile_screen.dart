@@ -1,17 +1,19 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:madcamp_week2/providers/tweet.dart';
 import 'package:madcamp_week2/providers/user.dart';
 import 'package:madcamp_week2/screens/tweet_write_screen.dart';
+import 'package:madcamp_week2/widgets/tweet_block.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userNotifierProvider).asData!.value!;
+    final user = ref.watch(userNotifierProvider).value!;
 
     final formattedDate =
         DateFormat('yyyy년 MM월 dd일에 가입함').format(user.createdAt.toLocal());
@@ -21,7 +23,36 @@ class ProfileScreen extends ConsumerWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout),
+              visualDensity: VisualDensity.standard,
+              onPressed: () async {
+                if (await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        content: const Text('로그아웃하시겠습니까?'),
+                        contentPadding: const EdgeInsets.all(24),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: const Text('아니오'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            child: const Text('네'),
+                          ),
+                        ],
+                      ),
+                    ) ??
+                    false) {
+                  await ref.read(userNotifierProvider.notifier).logout();
+                }
+              },
+            ),
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push<void>(
@@ -52,12 +83,11 @@ class ProfileScreen extends ConsumerWidget {
                   Text(
                     user.name,
                     style: const TextStyle(
-                      fontSize: 30,
+                      fontSize: 28,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 8),
                   Row(
                     children: [
                       Column(
@@ -76,7 +106,7 @@ class ProfileScreen extends ConsumerWidget {
                                 Icons.calendar_month_outlined,
                                 size: 16,
                               ),
-                              const SizedBox(width: 3),
+                              const SizedBox(width: 4),
                               Text(
                                 formattedDate,
                                 style: const TextStyle(
@@ -128,23 +158,24 @@ class ProfileScreen extends ConsumerWidget {
               Expanded(
                 child: TabBarView(
                   children: [
-                    ListView.builder(
-                      itemCount: 1000,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Center(
-                            child: Text(
-                              'TEST DATA $index',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                              ),
-                            ),
+                    switch (ref.watch(myTweetsNotifierProvider)) {
+                      AsyncData(:final value) when value != null =>
+                        RefreshIndicator(
+                          onRefresh: () => ref
+                              .read(myTweetsNotifierProvider.notifier)
+                              .refresh(),
+                          child: ListView.separated(
+                            itemCount: value.length,
+                            itemBuilder: (context, index) =>
+                                TweetBlock(tweet: value[index]),
+                            separatorBuilder: (context, index) =>
+                                const Divider(height: 1),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      AsyncLoading() =>
+                        const Center(child: CircularProgressIndicator()),
+                      _ => const SizedBox.shrink(),
+                    },
                     GridView.builder(
                       itemCount: 1000,
                       gridDelegate:

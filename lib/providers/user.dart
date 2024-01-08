@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart' hide User;
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart' as kakao
     show User;
@@ -161,6 +161,12 @@ class UserNotifier extends AsyncNotifier<User?> {
       return error.message;
     }
     return '알 수 없는 오류가 발생했습니다.';
+  }
+
+  Future<void> logout() async {
+    if (!state.hasValue || state.value == null) return;
+    await SecureStorage.deleteToken();
+    state = const AsyncData(null);
   }
 }
 
