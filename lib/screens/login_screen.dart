@@ -1,37 +1,28 @@
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:madcamp_week2/rest_client.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:madcamp_week2/providers/user.dart';
 import 'package:madcamp_week2/screens/additional_register_screen.dart';
-import 'package:madcamp_week2/screens/home_screen.dart';
 import 'package:madcamp_week2/screens/register_screen.dart';
-import 'package:madcamp_week2/secure_storage.dart';
 import 'package:madcamp_week2/widgets/kakao_login_button.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+final _messageProvider = StateProvider<String>((ref) => '');
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreen extends HookConsumerWidget {
   final _formKey = GlobalKey<FormState>();
 
-  String _message = '';
-
-  String _id = '';
-  String _pw = '';
+  LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final idController = useTextEditingController();
+    final pwController = useTextEditingController();
+
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Form(
               key: _formKey,
               child: Column(
@@ -46,6 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
+                    controller: idController,
                     decoration: const InputDecoration(
                       labelText: '아이디',
                     ),
@@ -59,10 +51,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                       return null;
                     },
-                    onChanged: (value) => _id = value,
                     textInputAction: TextInputAction.next,
                   ),
                   TextFormField(
+                    controller: pwController,
                     decoration: const InputDecoration(
                       labelText: '비밀번호',
                     ),
@@ -77,20 +69,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                       return null;
                     },
-                    onChanged: (value) => _pw = value,
                     textInputAction: TextInputAction.done,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(4),
                     child: Text(
-                      _message,
+                      ref.watch(_messageProvider),
                       style: const TextStyle(color: Colors.red),
                     ),
                   ),
                   FilledButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        await _loginWithIdAndPassword();
+                        final id = idController.text;
+                        final pw = pwController.text;
+
+                        ref.read(_messageProvider.notifier).state = await ref
+                                .read(userNotifierProvider.notifier)
+                                .loginWithIdAndPassword(id, pw) ??
+                            '';
                       }
                     },
                     style: FilledButton.styleFrom(
@@ -113,7 +110,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: const Text('회원가입'),
                   ),
-                  KakaoLoginButton(onPressed: _loginWithKakao),
+                  KakaoLoginButton(
+                    onPressed: () async {
+                      ref.read(_messageProvider.notifier).state = await ref
+                              .read(userNotifierProvider.notifier)
+                              .loginWithKakao((kakaoUser) async {
+                            await Navigator.push<void>(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AdditionalRegisterScreen(
+                                  type: RegisterType.kakao,
+                                  data: {'kakao_id': kakaoUser.id},
+                                ),
+                              ),
+                            );
+                          }) ??
+                          '';
+                    },
+                  ),
                 ],
               ),
             ),
@@ -121,121 +135,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> _loginWithIdAndPassword() async {
-    try {
-      final response = await restClient.getUserById(
-        {'user_id': _id, 'user_pw': _pw},
-      );
-
-      if (response.success) {
-        final userData = response.user!;
-
-        await SecureStorage.writeToken(userData.token);
-
-        if (!context.mounted) return;
-
-        await Navigator.pushAndRemoveUntil<void>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomeScreen(user: userData),
-          ),
-          (route) => false,
-        );
-      }
-    } catch (error) {
-      switch (error) {
-        case DioException(:final response?):
-          final data = response.data as Map<String, dynamic>;
-          setState(() => _message = data['error'].toString());
-        default:
-          setState(() => _message = '알 수 없는 오류가 발생했습니다.');
-      }
-    }
-  }
-
-  Future<void> _loginWithKakao() async {
-    final user = await _getKakaoUser();
-    if (user == null) {
-      setState(() => _message = '알 수 없는 오류가 발생했습니다.');
-      return;
-    }
-
-    try {
-      final response = await restClient.getUserById({'kakao_id': user.id});
-
-      if (response.success) {
-        final userData = response.user!;
-
-        await SecureStorage.writeToken(userData.token);
-
-        if (!context.mounted) return;
-
-        await Navigator.pushAndRemoveUntil<void>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomeScreen(user: userData),
-          ),
-          (route) => false,
-        );
-      }
-    } catch (error) {
-      switch (error) {
-        case DioException(:final response?) when response.statusCode == 401:
-          if (!context.mounted) return;
-
-          await Navigator.push<void>(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AdditionalRegisterScreen(
-                type: RegisterType.kakao,
-                data: {'kakao_id': user.id},
-              ),
-            ),
-          );
-        case DioException(:final response?):
-          final data = response.data as Map<String, dynamic>;
-          setState(() => _message = data['error'].toString());
-        default:
-          setState(() => _message = '알 수 없는 오류가 발생했습니다.');
-      }
-    }
-  }
-
-  Future<User?> _getKakaoUser() async {
-    if (await isKakaoTalkInstalled()) {
-      try {
-        await UserApi.instance.loginWithKakaoTalk();
-      } catch (error) {
-        if (kDebugMode) print(error);
-
-        switch (error) {
-          case KakaoAuthException(error: AuthErrorCause.accessDenied):
-          case PlatformException(code: 'CANCELED'):
-            return null;
-        }
-
-        try {
-          await UserApi.instance.loginWithKakaoAccount();
-        } catch (error) {
-          if (kDebugMode) print(error);
-        }
-      }
-    } else {
-      try {
-        await UserApi.instance.loginWithKakaoAccount();
-      } catch (error) {
-        if (kDebugMode) print(error);
-      }
-    }
-
-    try {
-      return await UserApi.instance.me();
-    } catch (error) {
-      if (kDebugMode) print(error);
-    }
-
-    return null;
   }
 }

@@ -1,20 +1,21 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:madcamp_week2/rest_client.dart';
-import 'package:madcamp_week2/screens/home_screen.dart';
-import 'package:madcamp_week2/secure_storage.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:madcamp_week2/providers/user.dart';
 
 enum RegisterType {
   normal,
   kakao,
 }
 
-class AdditionalRegisterScreen extends StatefulWidget {
+class AdditionalRegisterScreen extends HookConsumerWidget {
+  final _formKey = GlobalKey<FormState>();
+
   final RegisterType type;
   final Map<String, dynamic> data;
   final VoidCallback? onPrevPressed;
 
-  const AdditionalRegisterScreen({
+  AdditionalRegisterScreen({
     required this.type,
     required this.data,
     this.onPrevPressed,
@@ -22,33 +23,24 @@ class AdditionalRegisterScreen extends StatefulWidget {
   });
 
   @override
-  State<AdditionalRegisterScreen> createState() =>
-      _AdditionalRegisterScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final nameController = useTextEditingController();
+    final phoneController = useTextEditingController();
+    final birthDateController = useTextEditingController();
 
-class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
-  final _formKey = GlobalKey<FormState>();
-
-  bool _isProcessing = false;
-
-  String _name = '';
-  String _phone = '';
-  String _birthDate = '';
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('추가 정보 기입'),
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
               TextFormField(
+                controller: nameController,
                 decoration: const InputDecoration(
                   labelText: '이름',
                 ),
@@ -62,10 +54,10 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
                   }
                   return null;
                 },
-                onChanged: (value) => _name = value,
                 textInputAction: TextInputAction.next,
               ),
               TextFormField(
+                controller: phoneController,
                 decoration: const InputDecoration(
                   labelText: '전화번호',
                 ),
@@ -80,10 +72,10 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
                   }
                   return null;
                 },
-                onChanged: (value) => _phone = value,
                 textInputAction: TextInputAction.next,
               ),
               TextFormField(
+                controller: birthDateController,
                 decoration: const InputDecoration(
                   labelText: '생년월일',
                 ),
@@ -98,29 +90,56 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
                   }
                   return null;
                 },
-                onChanged: (value) => _birthDate = value,
                 textInputAction: TextInputAction.done,
               ),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (widget.onPrevPressed != null)
+                  if (onPrevPressed != null)
                     FilledButton(
-                      onPressed: widget.onPrevPressed,
+                      onPressed: onPrevPressed,
                       child: const Text('이전'),
                     ),
                   FilledButton(
-                    onPressed: _isProcessing
-                        ? null
-                        : () {
-                            if (_formKey.currentState!.validate()) {
-                              _register().then(
-                                (_) => setState(() => _isProcessing = false),
-                              );
-                              setState(() => _isProcessing = true);
-                            }
-                          },
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        final error = switch (type) {
+                          RegisterType.normal => await ref
+                              .read(userNotifierProvider.notifier)
+                              .registerWithIdAndPassword(
+                                userId: data['user_id'].toString(),
+                                userPw: data['user_pw'].toString(),
+                                name: nameController.text,
+                                phone: phoneController.text,
+                                birthDate: birthDateController.text,
+                              ),
+                          RegisterType.kakao => await ref
+                              .read(userNotifierProvider.notifier)
+                              .registerWithKakao(
+                                kakaoId: data['kakao_id'] as int,
+                                name: nameController.text,
+                                phone: phoneController.text,
+                                birthDate: birthDateController.text,
+                              ),
+                        };
+
+                        if (!context.mounted) return;
+
+                        if (error == null) {
+                          Navigator.pop(context);
+                          return;
+                        }
+
+                        await showDialog<void>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('오류'),
+                            content: Text(error),
+                          ),
+                        );
+                      }
+                    },
                     child: const Text('완료'),
                   ),
                 ],
@@ -130,53 +149,5 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> _register() async {
-    late UserResponse response;
-
-    try {
-      switch (widget.type) {
-        case RegisterType.normal:
-          response = await restClient.createUser({
-            'user_id': widget.data['user_id'],
-            'user_pw': widget.data['user_pw'],
-            'name': _name,
-            'phone': _phone,
-            'birth_date': _birthDate,
-          });
-        case RegisterType.kakao:
-          response = await restClient.createUserByKakao({
-            'kakao_id': widget.data['kakao_id'],
-            'name': _name,
-            'phone': _phone,
-            'birth_date': _birthDate,
-          });
-      }
-    } on DioException catch (error) {
-      if (!context.mounted) return;
-
-      await showDialog<void>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('오류'),
-          content: Text(error.message!),
-        ),
-      );
-    }
-
-    if (response.success) {
-      final userData = response.user!;
-
-      await SecureStorage.writeToken(userData.token);
-
-      if (!context.mounted) return;
-
-      await Navigator.pushAndRemoveUntil<void>(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen(user: userData)),
-        (route) => false,
-      );
-    }
   }
 }

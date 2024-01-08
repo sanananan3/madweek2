@@ -1,17 +1,18 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:madcamp_week2/models/user.dart';
+import 'package:madcamp_week2/providers/user.dart';
 import 'package:madcamp_week2/screens/tweet_write_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
-  final User user;
-
-  const ProfileScreen({required this.user, super.key});
+class ProfileScreen extends ConsumerWidget {
+  const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userNotifierProvider).asData!.value!;
+
     final formattedDate =
         DateFormat('yyyy년 MM월 dd일에 가입함').format(user.createdAt.toLocal());
     final formmatedBirth =

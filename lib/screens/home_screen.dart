@@ -1,38 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:madcamp_week2/models/user.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:madcamp_week2/screens/profile_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  final User user;
+final _currentIndexProvider = StateProvider<int>((ref) => 0);
 
-  const HomeScreen({required this.user, super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentIndex = ref.watch(_currentIndexProvider);
+
     return Scaffold(
       body: IndexedStack(
-        index: _currentIndex,
-        children: [
-          ProfileScreen(user: widget.user),
-          const Text('2'),
-          const Text('3'),
-          const Text('4'),
-          const Text('5'),
+        index: currentIndex,
+        children: const [
+          ProfileScreen(),
+          Text('2'),
+          Text('3'),
+          Text('4'),
+          Text('5'),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
+        currentIndex: currentIndex,
         type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          setState(() => _currentIndex = index);
-        },
+        onTap: (index) =>
+            ref.read(_currentIndexProvider.notifier).state = index,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.abc),

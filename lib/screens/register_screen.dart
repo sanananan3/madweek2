@@ -27,7 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             automaticallyImplyLeading: false,
           ),
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Form(
               key: _formKey,
               child: Column(
@@ -45,6 +45,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       if (value.length < 5) {
                         return '5글자 이상 입력해주세요.';
                       }
+
+                      if (int.tryParse(value) != null) {
+                        return '아이디는 문자가 들어가야 합니다.';
+                      }
+
                       return null;
                     },
                     onChanged: (value) => _id = value,
