@@ -12,14 +12,10 @@ class Tab1 extends StatelessWidget {
 
   Widget build(BuildContext context) {
 
-    String formattedDate = DateFormat('yyyy년 MM월 dd일에 가입함').format(user.date.toLocal());
+    String formattedDate = DateFormat('yyyy년 MM월 dd일에 가입함').format(user.createdAt.toLocal());
 
-    String birth_part1 = user.birth.substring(0,2);
-    String birth_part2 = user.birth.substring(2,4);
-    String birth_part3 = user.birth.substring(4,6);
+    String formmatedBirth = DateFormat('yyyy년 MM월 dd일에 태어난').format(user.birthDate.toLocal());
 
-    String yearPrefix = (birth_part1.startsWith('0')) ? '20':'19';
-    String formattedBirth = '$yearPrefix$birth_part1년 $birth_part2월 $birth_part3일에 태어난';
 
 
     return MaterialApp(
@@ -52,7 +48,7 @@ class Tab1 extends StatelessWidget {
                          crossAxisAlignment: CrossAxisAlignment.start,
                          children: [
                            Text(
-                             '$formattedBirth',
+                             '$formmatedBirth',
                              style: TextStyle(
                                color: Colors.white.withOpacity(0.5),
                                fontSize: 12,
@@ -87,7 +83,7 @@ class Tab1 extends StatelessWidget {
                      height: 10,
                    ),
                    Text(
-                     ' @ ' + (user.userId != null ? user.userId! : user.kakaoId!),
+                     ' @ ' + (user.userId != null ? user.userId! : user.kakaoId.toString()),
                      style: TextStyle(
                        color: Colors.white.withOpacity(0.8),
                        fontSize: 13,
