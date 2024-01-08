@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:madcamp_week2/models/user_data.dart';
+import 'package:madcamp_week2/models/user.dart';
 import 'package:madcamp_week2/screens/tweet_write_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
-  final UserData user;
+  final User user;
 
   const ProfileScreen({required this.user, super.key});
 

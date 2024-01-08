@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:madcamp_week2/models/user_data.dart';
+import 'package:madcamp_week2/models/user.dart';
 import 'package:madcamp_week2/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  final UserData user;
+  final User user;
 
   const HomeScreen({required this.user, super.key});
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:madcamp_week2/models/user_data.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart' hide User;
+import 'package:madcamp_week2/models/user.dart';
 import 'package:madcamp_week2/rest_client.dart';
 import 'package:madcamp_week2/screens/home_screen.dart';
 import 'package:madcamp_week2/screens/login_screen.dart';
@@ -18,7 +18,7 @@ Future<void> main() async {
   //await SecureStorage.instance.deleteAll();
   final token = await SecureStorage.readToken();
 
-  UserData? user;
+  User? user;
 
   if (token != null && token.isNotEmpty) {
     try {
@@ -33,7 +33,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final UserData? user;
+  final User? user;
 
   const MyApp({this.user, super.key});
 
