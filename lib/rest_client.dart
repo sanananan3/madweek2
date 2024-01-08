@@ -13,20 +13,23 @@ abstract class RestClient {
   @POST('/register')
   Future<UserResponse> createUser(@Body() Map<String, dynamic> data);
 
-  @POST('/kakaoregister')
+  @POST('/register/kakao')
   Future<UserResponse> createUserByKakao(@Body() Map<String, dynamic> data);
 
   @POST('/login')
-  Future<UserResponse> getUser(@Body() Map<String, dynamic> data);
+  Future<UserResponse> getUserById(@Body() Map<String, dynamic> data);
+
+  @POST('/verify')
+  Future<UserResponse> getUserByToken(@Body() Map<String, dynamic> data);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class UserResponse {
-  final bool? success;
+  final bool success;
   final UserData? user;
   final String? error;
 
-  const UserResponse({this.success, this.user, this.error});
+  const UserResponse({required this.success, this.user, this.error});
 
   factory UserResponse.fromJson(Map<String, dynamic> json) =>
       _$UserResponseFromJson(json);

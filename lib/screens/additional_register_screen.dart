@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:madcamp_week2/main.dart';
 import 'package:madcamp_week2/rest_client.dart';
+import 'package:madcamp_week2/screens/home_screen.dart';
+import 'package:madcamp_week2/secure_storage.dart';
 
 enum RegisterType {
   normal,
@@ -164,14 +165,18 @@ class _AdditionalRegisterScreenState extends State<AdditionalRegisterScreen> {
       );
     }
 
-    if (response.success == null || !response.success!) return;
+    if (response.success) {
+      final userData = response.user!;
 
-    if (!context.mounted) return;
+      await SecureStorage.writeToken(userData.token);
 
-    await Navigator.pushAndRemoveUntil<void>(
-      context,
-      MaterialPageRoute(builder: (context) => MyHomePage(user: response.user!)),
-      (route) => false,
-    );
+      if (!context.mounted) return;
+
+      await Navigator.pushAndRemoveUntil<void>(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen(user: userData)),
+        (route) => false,
+      );
+    }
   }
 }

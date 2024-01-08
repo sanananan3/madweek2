@@ -7,7 +7,7 @@ part of 'rest_client.dart';
 // **************************************************************************
 
 UserResponse _$UserResponseFromJson(Map<String, dynamic> json) => UserResponse(
-      success: json['success'] as bool?,
+      success: json['success'] as bool,
       user: json['user'] == null
           ? null
           : UserData.fromJson(json['user'] as Map<String, dynamic>),
@@ -80,7 +80,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/kakaoregister',
+              '/register/kakao',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -94,7 +94,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<UserResponse> getUser(Map<String, dynamic> data) async {
+  Future<UserResponse> getUserById(Map<String, dynamic> data) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -109,6 +109,34 @@ class _RestClient implements RestClient {
             .compose(
               _dio.options,
               '/login',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = UserResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<UserResponse> getUserByToken(Map<String, dynamic> data) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<UserResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/verify',
               queryParameters: queryParameters,
               data: _data,
             )
