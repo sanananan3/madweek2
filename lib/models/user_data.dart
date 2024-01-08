@@ -7,20 +7,20 @@ class UserData {
   final int id;
   final String? userId;
   final String? userPw;
-  final String? kakaoId;
+  final int? kakaoId;
   final String token;
   final String name;
-  final String call;
-  final String birth;
-  final DateTime date;
+  final String phone;
+  final DateTime birthDate;
+  final DateTime createdAt;
 
   const UserData({
     required this.id,
     required this.token,
     required this.name,
-    required this.call,
-    required this.birth,
-    required this.date,
+    required this.phone,
+    required this.birthDate,
+    required this.createdAt,
     this.userId,
     this.userPw,
     this.kakaoId,
