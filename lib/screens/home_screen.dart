@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:madcamp_week2/models/user_data.dart';
 import 'package:madcamp_week2/screens/tab1.dart';
+import 'package:madcamp_week2/screens/tab2.dart';
 
 class HomeScreen extends StatefulWidget {
   final UserData user;
@@ -22,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           // tab 1
           Tab1(user: widget.user),
-          const Text('2'),
+          Tab2(user:widget.user),
           const Text('3'),
           const Text('4'),
           const Text('5'),
