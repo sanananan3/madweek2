@@ -8,6 +8,7 @@ const userController = require('./controllers/user');
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const express = require('express');
+const os = require('os');
 const app = express();
 
 app.set('port', process.env.PORT || 8000);
@@ -20,17 +21,16 @@ app.post('/register/kakao', userController.registerKakao);
 app.post('/login', userController.login);
 app.post('/verify', userController.verify);
 
-app.post('/tweet', middleware.isAuthenticated, tweetController.getTweet);
-app.post('/tweet/my', middleware.isAuthenticated, tweetController.getMyTweet);
-app.post(
-  '/tweet/write',
-  middleware.isAuthenticated,
-  tweetController.writeTweet
-);
+app.get('/tweet', middleware.isAuthenticated, tweetController.getTweet);
+app.get('/tweet/my', middleware.isAuthenticated, tweetController.getMyTweet);
+app.post('/tweet', middleware.isAuthenticated, tweetController.writeTweet);
+app.patch('/tweet', middleware.isAuthenticated, tweetController.editTweet);
+app.delete('/tweet', middleware.isAuthenticated, tweetController.deleteTweet);
 
 app.listen(app.get('port'), () => {
   console.log(
-    '  Server is running at http://localhost:%d in %s mode',
+    '  Server is running at %s:%d in %s mode',
+    os.networkInterfaces()['en0'].find((e) => e.family === 'IPv4').address,
     app.get('port'),
     app.get('env')
   );

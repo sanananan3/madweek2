@@ -8,13 +8,14 @@ const { TOKEN_SECRET } = process.env;
 
 exports.isAuthenticated = async (req, res, next) => {
   try {
-    const token = cookie.unsign(req.body.token, TOKEN_SECRET);
-    if (!token) {
+    const signedToken = req.header('Authorization');
+    if (!signedToken) {
       return res
         .status(401)
-        .json({ success: false, error: '잘못된 토큰입니다.' });
+        .json({ success: false, error: '토큰이 존재하지 않습니다.' });
     }
 
+    const token = cookie.unsign(signedToken, TOKEN_SECRET);
     const result = await db
       .select()
       .from(schema.users)
