@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:madcamp_week2/models/user_data.dart';
-import 'package:madcamp_week2/screens/tab1.dart';
+import 'package:madcamp_week2/models/user.dart';
+import 'package:madcamp_week2/screens/profile_screen.dart';
 import 'package:madcamp_week2/screens/tab2.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:madcamp_week2/screens/profile_screen.dart';
+
 
 
 class HomeScreen extends HookWidget {
@@ -19,11 +19,8 @@ class HomeScreen extends HookWidget {
         index: currentIndex.value,
         children: const [
           ProfileScreen(),
-          Tab2(user:widget.user),
+          Tab2(),
           Text('3'),
-          Text('4'),
-          Text('5'),
-
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -36,21 +33,15 @@ class HomeScreen extends HookWidget {
             label: '프로필',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.abc),
-            label: 'Tap 2',
+            icon: Icon(Icons.search),
+            label: '검색',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.abc),
-            label: 'Tap 3',
+            icon: Icon(Icons.thumb_up),
+            label: '추천 게시물',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.abc),
-            label: 'Tap 4',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.abc),
-            label: 'Tap 5',
-          ),
+
+
         ],
       ),
     );

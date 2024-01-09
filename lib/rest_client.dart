@@ -31,6 +31,10 @@ abstract class RestClient {
 
   @POST('/tweet/write')
   Future<TweetsResponse> writeTweet(@Body() Map<String, dynamic> data);
+
+  @POST('/search')
+  Future<UserResponse> searchUsers(@Body() Map<String, dynamic> data);
+
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)

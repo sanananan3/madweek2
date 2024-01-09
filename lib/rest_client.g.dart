@@ -172,6 +172,8 @@ class _RestClient implements RestClient {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(data);
+
+
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<TweetsResponse>(Options(
       method: 'POST',
@@ -249,6 +251,31 @@ class _RestClient implements RestClient {
     return value;
   }
 
+
+  Future<UserResponse> searchUsers(Map<String, dynamic>data) async{
+    const _extra = <String, dynamic> {};
+    final queryParameters = <String, dynamic> {};
+    final _headers = <String, dynamic> {};
+    final _result = await _dio.fetch<Map<String, dynamic>> (
+      _setStreamType<UserResponse> (
+        Options(
+          method: 'POST',
+          headers: _headers,
+          extra: _extra,
+        ).compose(
+          _dio.options,
+          '/search',
+          queryParameters:  queryParameters,
+          data: data,
+        ).copyWith(
+          baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl,),
+        ),
+      ),
+    );
+    final value = UserResponse.fromJson(_result.data!);
+    return value;
+
+  }
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||
@@ -278,4 +305,7 @@ class _RestClient implements RestClient {
 
     return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
+
+
+
 }

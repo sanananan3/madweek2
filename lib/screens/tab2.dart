@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:madcamp_week2/models/user_data.dart';
+import 'package:madcamp_week2/providers//user.dart';
+import 'package:madcamp_week2/rest_client.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -9,14 +10,17 @@ import 'package:http/http.dart' as http;
 
 
 class Tab2 extends StatefulWidget {
-  final UserData user;
-  const Tab2({required this.user, super.key});
+
+  const Tab2({super.key});
 
   State<Tab2> createState() => _SearchBarAppState();
 
 }
 
 class _SearchBarAppState extends State<Tab2> {
+
+  late SearchController _searchController;
+
   bool isDark = true;
   List<String> videoIds =['D8VEhcPeSlc', '97_-_WugRFA','iUw3LPM7OBU','WGm2HmXeeRI','gvXsmI3Gdq8','5_n6t9G2TUQ','3kGAlp_PNUg','9JFi7MmjtGA','yFlxYHjHYAw',
     'j1uXcHwLhHM','KHouJsSH4PM','EIz09kLzN9k','6ZUIwj3FgUY','jOTfBlKSQYY','eQNHDV7lKgE','Dbxzh078jr4','ArmDp-zijuc','sVTy_wmn5SU','UNo0TG9LwwI'];
@@ -34,6 +38,7 @@ class _SearchBarAppState extends State<Tab2> {
 
   void initState() {
     super.initState();
+    _searchController = SearchController();
   }
 
   void changeVideo(){
@@ -59,7 +64,6 @@ class _SearchBarAppState extends State<Tab2> {
     });
   }
 
-
   Widget build(BuildContext context){
     final ThemeData themeData = ThemeData (
       useMaterial3: true,
@@ -78,16 +82,39 @@ class _SearchBarAppState extends State<Tab2> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: SearchAnchor(
+                searchController: _searchController,
                 builder: (BuildContext context, SearchController controller) {
                   return SearchBar(
                     controller: controller,
                     padding: const MaterialStatePropertyAll<EdgeInsets>(
                         EdgeInsets.symmetric(horizontal: 16.0)),
-                    onTap: () {
-                      controller.openView();
+
+                    onChanged: (String query) {
+
                     },
-                    onChanged: (_) {
-                      controller.openView();
+                    onTap:() async {
+
+                    try {
+                      final response = await restClient.searchUsers({
+                        'userId': _searchController.text,
+                        'name':  _searchController.text, // Add the appropriate property for name
+                        'phone':  _searchController.text, // Add the appropriate property for phone
+
+
+                      // Add the appropriate property for birthDate
+                      });
+                      if(response.success){
+                        final user = response.user!;
+
+                        print('지금 !! User found: $user');
+
+                      } else {
+                        print ('지금!!! user not found ');
+                      }
+                    } catch(error) {
+                      print('지금!! 걍 catch로 유저 서치 에러남 $error');
+                    }
+
                     },
                     leading: const Icon(Icons.search),
                     trailing: <Widget>[

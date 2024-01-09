@@ -168,6 +168,8 @@ class UserNotifier extends AsyncNotifier<User?> {
     await SecureStorage.deleteToken();
     state = const AsyncData(null);
   }
+
+
 }
 
 final userNotifierProvider =
