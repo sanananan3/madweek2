@@ -1,59 +1,25 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:madcamp_week2/hooks/youtube_player_controller.dart';
+import 'package:madcamp_week2/providers/rest_client.dart';
+import 'package:madcamp_week2/providers/yt_music.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class Tab2 extends StatefulWidget {
+class Tab2 extends HookConsumerWidget {
   const Tab2({super.key});
 
   @override
-  State<Tab2> createState() => _SearchBarAppState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final youtubePlayerController = useYoutubePlayerController(
+      initialVideoId: ref.read(ytMusicNotifierProvider),
+      flags: const YoutubePlayerFlags(mute: true, startAt: 59),
+    );
 
-class _SearchBarAppState extends State<Tab2> {
-  final _random = Random();
+    ref.listen(
+      ytMusicNotifierProvider,
+      (prev, next) => youtubePlayerController.load(next),
+    );
 
-  List<String> videoIds = [
-    'D8VEhcPeSlc',
-    '97_-_WugRFA',
-    'iUw3LPM7OBU',
-    'WGm2HmXeeRI',
-    'gvXsmI3Gdq8',
-    '5_n6t9G2TUQ',
-    '3kGAlp_PNUg',
-    '9JFi7MmjtGA',
-    'yFlxYHjHYAw',
-    'j1uXcHwLhHM',
-    'KHouJsSH4PM',
-    'EIz09kLzN9k',
-    '6ZUIwj3FgUY',
-    'jOTfBlKSQYY',
-    'eQNHDV7lKgE',
-    'Dbxzh078jr4',
-    'ArmDp-zijuc',
-    'sVTy_wmn5SU',
-    'UNo0TG9LwwI',
-  ];
-
-  String currentVideoId = 'D8VEhcPeSlc';
-
-  final _con = YoutubePlayerController(
-    initialVideoId: 'D8VEhcPeSlc',
-    flags: const YoutubePlayerFlags(startAt: 59),
-  );
-
-  Future<void> _refresh() async {
-    await Future<void>.delayed(const Duration(seconds: 1));
-
-    setState(() {
-      final newVideoId = videoIds[_random.nextInt(videoIds.length)];
-      _con.load(newVideoId);
-      currentVideoId = newVideoId;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -62,7 +28,8 @@ class _SearchBarAppState extends State<Tab2> {
         ),
       ),
       body: RefreshIndicator(
-        onRefresh: _refresh,
+        onRefresh: () async =>
+            ref.read(ytMusicNotifierProvider.notifier).refresh(),
         child: ListView(
           children: [
             Padding(
@@ -70,20 +37,36 @@ class _SearchBarAppState extends State<Tab2> {
               child: SearchAnchor(
                 builder: (context, controller) {
                   return SearchBar(
-                    controller: controller,
                     padding: const MaterialStatePropertyAll(
                       EdgeInsets.symmetric(horizontal: 16),
                     ),
-                    onTap: () => controller.openView(),
-                    onChanged: (_) => controller.openView(),
+                    hintText: '검색...',
                     leading: const Icon(Icons.search),
+                    onTap: () => controller.openView(),
                   );
                 },
-                suggestionsBuilder: (context, controller) {
-                  return List<ListTile>.generate(
-                    5,
-                    (index) => ListTile(title: Text('item $index')),
-                  );
+                suggestionsBuilder: (context, controller) async {
+                  final search = controller.text;
+                  if (search.length < 2) return [];
+
+                  try {
+                    final response = await ref
+                        .read(restClientProvider)
+                        .getUsers({'search': search});
+                    if (response.success) {
+                      return response.users!
+                          .map((user) => ListTile(title: Text(user.name)))
+                          .toList();
+                    }
+                  } catch (error) {
+                    return const [
+                      ListTile(
+                        title: Text('알 수 없는 오류가 발생했습니다.'),
+                        textColor: Colors.red,
+                      ),
+                    ];
+                  }
+                  return [];
                 },
               ),
             ),
@@ -97,7 +80,7 @@ class _SearchBarAppState extends State<Tab2> {
               ),
             ),
             const SizedBox(height: 16),
-            YoutubePlayer(controller: _con),
+            YoutubePlayer(controller: youtubePlayerController),
             const SizedBox(height: 16),
             const Text(
               '   나를 위한 실시간 트렌드',

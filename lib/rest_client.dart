@@ -24,6 +24,9 @@ abstract class RestClient {
   @POST('/verify')
   Future<UserResponse> getUserByToken(@Body() UserRequestBody data);
 
+  @POST('/search')
+  Future<UsersResponse> getUsers(@Body() Map<String, dynamic> data);
+
   @GET('/tweet')
   Future<TweetsResponse> getTweets();
 
@@ -31,13 +34,13 @@ abstract class RestClient {
   Future<TweetsResponse> getMyTweets();
 
   @POST('/tweet')
-  Future<TweetsResponse> writeTweet(@Body() TweetRequestBody data);
+  Future<TweetResponse> writeTweet(@Body() TweetRequestBody data);
 
   @PATCH('/tweet')
-  Future<TweetsResponse> editTweet(@Body() TweetRequestBody data);
+  Future<TweetResponse> editTweet(@Body() TweetRequestBody data);
 
   @DELETE('/tweet')
-  Future<TweetsResponse> deleteTweet(@Body() TweetRequestBody data);
+  Future<TweetResponse> deleteTweet(@Body() TweetRequestBody data);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -81,6 +84,20 @@ class UserResponse {
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
+class UsersResponse {
+  final bool success;
+  final List<User>? users;
+  final String? error;
+
+  const UsersResponse({required this.success, this.users, this.error});
+
+  factory UsersResponse.fromJson(Map<String, dynamic> json) =>
+      _$UsersResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UsersResponseToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class TweetRequestBody {
   final int? id;
   final String? content;
@@ -91,6 +108,20 @@ class TweetRequestBody {
       _$TweetRequestBodyFromJson(json);
 
   Map<String, dynamic> toJson() => _$TweetRequestBodyToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class TweetResponse {
+  final bool success;
+  final Tweet? tweet;
+  final String? error;
+
+  const TweetResponse({required this.success, this.tweet, this.error});
+
+  factory TweetResponse.fromJson(Map<String, dynamic> json) =>
+      _$TweetResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TweetResponseToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)

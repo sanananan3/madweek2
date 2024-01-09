@@ -46,7 +46,7 @@ exports.writeTweet = async (req, res) => {
       })
       .returning();
 
-    res.status(200).json({ success: true, tweets: result });
+    res.status(200).json({ success: true, tweet: result[0] });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -84,7 +84,7 @@ exports.editTweet = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      tweets: [Object.assign(tweet, { content })],
+      tweet: Object.assign(tweet, { content }),
     });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -118,7 +118,7 @@ exports.deleteTweet = async (req, res) => {
 
     await db.delete(schema.tweets).where(eq(schema.tweets.id, id));
 
-    res.status(200).json({ success: true, tweets: result });
+    res.status(200).json({ success: true, tweet });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

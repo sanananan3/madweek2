@@ -17,8 +17,6 @@ class HomeScreen extends HookWidget {
           ProfileScreen(),
           Tab2(),
           Text('3'),
-          Text('4'),
-          Text('5'),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -30,20 +28,12 @@ class HomeScreen extends HookWidget {
             label: '프로필',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.abc),
-            label: 'Tap 2',
+            icon: Icon(Icons.search),
+            label: '검색',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.abc),
-            label: 'Tap 3',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.abc),
-            label: 'Tap 4',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.abc),
-            label: 'Tap 5',
+            icon: Icon(Icons.thumb_up),
+            label: '추천 게시물',
           ),
         ],
       ),

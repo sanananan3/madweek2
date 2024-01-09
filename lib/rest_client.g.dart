@@ -43,6 +43,22 @@ Map<String, dynamic> _$UserResponseToJson(UserResponse instance) =>
       'error': instance.error,
     };
 
+UsersResponse _$UsersResponseFromJson(Map<String, dynamic> json) =>
+    UsersResponse(
+      success: json['success'] as bool,
+      users: (json['users'] as List<dynamic>?)
+          ?.map((e) => User.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      error: json['error'] as String?,
+    );
+
+Map<String, dynamic> _$UsersResponseToJson(UsersResponse instance) =>
+    <String, dynamic>{
+      'success': instance.success,
+      'users': instance.users,
+      'error': instance.error,
+    };
+
 TweetRequestBody _$TweetRequestBodyFromJson(Map<String, dynamic> json) =>
     TweetRequestBody(
       id: json['id'] as int?,
@@ -53,6 +69,22 @@ Map<String, dynamic> _$TweetRequestBodyToJson(TweetRequestBody instance) =>
     <String, dynamic>{
       'id': instance.id,
       'content': instance.content,
+    };
+
+TweetResponse _$TweetResponseFromJson(Map<String, dynamic> json) =>
+    TweetResponse(
+      success: json['success'] as bool,
+      tweet: json['tweet'] == null
+          ? null
+          : Tweet.fromJson(json['tweet'] as Map<String, dynamic>),
+      error: json['error'] as String?,
+    );
+
+Map<String, dynamic> _$TweetResponseToJson(TweetResponse instance) =>
+    <String, dynamic>{
+      'success': instance.success,
+      'tweet': instance.tweet,
+      'error': instance.error,
     };
 
 TweetsResponse _$TweetsResponseFromJson(Map<String, dynamic> json) =>
@@ -200,6 +232,34 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<UsersResponse> getUsers(Map<String, dynamic> data) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<UsersResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/search',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = UsersResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<TweetsResponse> getTweets() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -254,14 +314,14 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<TweetsResponse> writeTweet(TweetRequestBody data) async {
+  Future<TweetResponse> writeTweet(TweetRequestBody data) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(data.toJson());
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<TweetsResponse>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<TweetResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -277,19 +337,19 @@ class _RestClient implements RestClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = TweetsResponse.fromJson(_result.data!);
+    final value = TweetResponse.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<TweetsResponse> editTweet(TweetRequestBody data) async {
+  Future<TweetResponse> editTweet(TweetRequestBody data) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(data.toJson());
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<TweetsResponse>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<TweetResponse>(Options(
       method: 'PATCH',
       headers: _headers,
       extra: _extra,
@@ -305,19 +365,19 @@ class _RestClient implements RestClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = TweetsResponse.fromJson(_result.data!);
+    final value = TweetResponse.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<TweetsResponse> deleteTweet(TweetRequestBody data) async {
+  Future<TweetResponse> deleteTweet(TweetRequestBody data) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(data.toJson());
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<TweetsResponse>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<TweetResponse>(Options(
       method: 'DELETE',
       headers: _headers,
       extra: _extra,
@@ -333,7 +393,7 @@ class _RestClient implements RestClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = TweetsResponse.fromJson(_result.data!);
+    final value = TweetResponse.fromJson(_result.data!);
     return value;
   }
 

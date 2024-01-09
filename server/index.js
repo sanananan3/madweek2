@@ -20,6 +20,7 @@ app.post('/register', userController.register);
 app.post('/register/kakao', userController.registerKakao);
 app.post('/login', userController.login);
 app.post('/verify', userController.verify);
+app.post('/search', userController.search);
 
 app.get('/tweet', middleware.isAuthenticated, tweetController.getTweet);
 app.get('/tweet/my', middleware.isAuthenticated, tweetController.getMyTweet);

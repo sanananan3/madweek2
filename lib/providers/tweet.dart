@@ -29,7 +29,7 @@ class MyTweetsNotifier extends AsyncNotifier<List<Tweet>?> {
       final response =
           await restClient.writeTweet(TweetRequestBody(content: content));
       if (response.success) {
-        state = AsyncData([response.tweets!.first, ...?state.value]);
+        state = AsyncData([response.tweet!, ...?state.value]);
         return null;
       }
     } on DioException catch (error) {
