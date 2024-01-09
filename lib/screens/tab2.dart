@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:madcamp_week2/providers//user.dart';
+import 'package:madcamp_week2/models/user.dart';
+import 'package:madcamp_week2/providers/tweet.dart';
 import 'package:madcamp_week2/rest_client.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'dart:convert';
@@ -18,6 +20,8 @@ class Tab2 extends StatefulWidget {
 }
 
 class _SearchBarAppState extends State<Tab2> {
+
+
 
   late SearchController _searchController;
 
@@ -92,7 +96,7 @@ class _SearchBarAppState extends State<Tab2> {
                     onChanged: (String query) {
 
                     },
-                    onTap:() async {
+                    onSubmitted:(String query) async {
 
                     try {
                       final response = await restClient.searchUsers({
@@ -107,15 +111,19 @@ class _SearchBarAppState extends State<Tab2> {
                         final user = response.user!;
 
                         print('지금 !! User found: $user');
+                        _showUserDialog(response.user);
 
                       } else {
                         print ('지금!!! user not found ');
+                        _shownotfoundDialog();
                       }
                     } catch(error) {
                       print('지금!! 걍 catch로 유저 서치 에러남 $error');
+                      _shownotfoundDialog();
                     }
 
                     },
+
                     leading: const Icon(Icons.search),
                     trailing: <Widget>[
                       Tooltip(
@@ -166,5 +174,168 @@ class _SearchBarAppState extends State<Tab2> {
         ),
 
           );
+  }
+
+  void _showUserDialog(user){
+
+    final formattedDate = DateFormat('yyyy년 MM월 dd일에 가입함').format((user.createdAt as DateTime).toLocal());
+    final formattedBirth = DateFormat('yyyy년 MM월 dd일에 가입함').format((user.birthDate as DateTime).toLocal());
+
+    showDialog (
+
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+
+              content: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10), child: Column(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      formattedBirth,
+                      style: const TextStyle(
+                        color: Colors.white54,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+
+                      ),
+                    ),
+                    Text(
+                      (user.name as String),
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              ' @ ${user.userId ?? user.kakaoId}',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+
+                              ),
+                            ),
+                            Row(
+                              children: [const Icon(
+                                Icons.calendar_month_outlined,
+                                size: 16,
+                              ),
+                                const SizedBox(width:4),
+                                Text(formattedDate, style: TextStyle(fontSize:13, fontWeight: FontWeight.w300,),),
+
+                              ],
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+
+                      ],
+                    ),
+                    const SizedBox(height: 16,),
+                    Row(
+                      children: [
+                        TextButton(
+                          onPressed: (){},
+                          child: const Text('팔로워'),
+                        ),
+                        const SizedBox(width: 32),
+                        TextButton(
+                          onPressed: (){},
+                          child: const Text('팔로잉'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 8,),
+                // const TabBar(
+                //   indicatorSize: TabBarIndicatorSize.tab,
+                //   labelStyle: TextStyle(
+                //     color: Colors.white,
+                //     fontWeight: FontWeight.bold,
+                //     fontSize: 13,
+                //   ),
+                //   tabs: [
+                //     Tab(text:'게시물'),
+                //     Tab(text: '미디어'),
+                //     Tab(text: '마음에 들어요'),
+                //   ],
+                // ),
+              ]
+            )
+          ),
+
+          actions:[
+            TextButton(
+
+              onPressed: () {
+                Navigator.of(context).pop();
+
+              },
+              style: TextButton.styleFrom(
+                minimumSize: Size(40,30),
+              ),
+              child: Text('확인', style: TextStyle(fontSize: 11)),
+            ),
+          ],
+        );
+      }
+    );
+  }
+  void _shownotfoundDialog(){
+
+    showDialog(
+
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            title: Text('           사용자를 찾을 수 없습니다', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold ,)),
+            backgroundColor: Color(0xFF1DA1F2),
+
+            content: Column (
+              crossAxisAlignment:  CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
+                SizedBox(height: 20),
+                Text('유효한 인물이나 토픽 또는 키워드를 검색해 보세요', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)
+                ),
+              ],
+            ),
+
+            actions:[
+              TextButton(
+
+                onPressed: () {
+                  Navigator.of(context).pop();
+
+                },
+                style: TextButton.styleFrom(
+                minimumSize: Size(40,30),
+                ),
+                child: Text('확인', style: TextStyle(fontSize: 11)),
+              ),
+            ],
+          );
+        }
+
+    );
   }
 }
