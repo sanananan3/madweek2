@@ -2,46 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:madcamp_week2/models/user_data.dart';
 import 'package:madcamp_week2/screens/tab1.dart';
 import 'package:madcamp_week2/screens/tab2.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:madcamp_week2/screens/profile_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  final UserData user;
 
-  const HomeScreen({required this.user, super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
+class HomeScreen extends HookWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = useState(0);
+
     return Scaffold(
       body: IndexedStack(
-        index: _currentIndex,
-        children: [
-          // tab 1
-          Tab1(user: widget.user),
+
+        index: currentIndex.value,
+        children: const [
+          ProfileScreen(),
           Tab2(user:widget.user),
-          const Text('3'),
-          const Text('4'),
-          const Text('5'),
+          Text('3'),
+          Text('4'),
+          Text('5'),
+
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        selectedItemColor: Colors.deepPurple,
-        unselectedItemColor: Colors.black,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+        currentIndex: currentIndex.value,
+        type: BottomNavigationBarType.fixed,
+        onTap: (index) => currentIndex.value = index,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.abc),
-            label: 'Tap 1',
+            icon: Icon(Icons.person),
+            label: '프로필',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.abc),

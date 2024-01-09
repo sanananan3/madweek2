@@ -1,6 +1,8 @@
 require('dotenv').config();
 require('./db');
 
+const middleware = require('./middleware');
+const tweetController = require('./controllers/tweet');
 const userController = require('./controllers/user');
 
 const bodyParser = require('body-parser');
@@ -17,6 +19,14 @@ app.post('/register', userController.register);
 app.post('/register/kakao', userController.registerKakao);
 app.post('/login', userController.login);
 app.post('/verify', userController.verify);
+
+app.post('/tweet', middleware.isAuthenticated, tweetController.getTweet);
+app.post('/tweet/my', middleware.isAuthenticated, tweetController.getMyTweet);
+app.post(
+  '/tweet/write',
+  middleware.isAuthenticated,
+  tweetController.writeTweet
+);
 
 app.listen(app.get('port'), () => {
   console.log(

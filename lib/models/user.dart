@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'user_data.g.dart';
+part 'user.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class UserData {
+class User {
   final int id;
   final String? userId;
   final String? userPw;
@@ -14,7 +14,7 @@ class UserData {
   final DateTime birthDate;
   final DateTime createdAt;
 
-  const UserData({
+  const User({
     required this.id,
     required this.token,
     required this.name,
@@ -26,8 +26,7 @@ class UserData {
     this.kakaoId,
   });
 
-  factory UserData.fromJson(Map<String, dynamic> json) =>
-      _$UserDataFromJson(json);
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UserDataToJson(this);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }
