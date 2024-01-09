@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:madcamp_week2/models/tweet.dart';
 import 'package:madcamp_week2/providers/tweet.dart';
 
 class TweetWriteScreen extends HookConsumerWidget {
-  const TweetWriteScreen({super.key});
+  final Tweet? tweet;
+
+  const TweetWriteScreen({this.tweet, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final errorText = useState<String?>(null);
-    final contentController = useTextEditingController();
+    final contentController = useTextEditingController(text: tweet?.content);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          '새 트윗',
-          style: TextStyle(fontSize: 18),
+        title: Text(
+          tweet != null ? '트윗 수정' : '새 트윗',
+          style: const TextStyle(fontSize: 18),
         ),
         backgroundColor: const Color(0xFF36465D),
       ),
@@ -56,9 +59,14 @@ class TweetWriteScreen extends HookConsumerWidget {
                       backgroundColor: const Color(0xFF42A5F5),
                     ),
                     onPressed: () async {
-                      final result = await ref
-                          .read(myTweetsNotifierProvider.notifier)
-                          .writeTweet(contentController.text);
+                      final result = switch (tweet) {
+                        Tweet(:final id) => await ref
+                            .read(myTweetsNotifierProvider.notifier)
+                            .editTweet(id, contentController.text),
+                        _ => await ref
+                            .read(myTweetsNotifierProvider.notifier)
+                            .writeTweet(contentController.text),
+                      };
 
                       if (!context.mounted) return;
 
@@ -70,7 +78,8 @@ class TweetWriteScreen extends HookConsumerWidget {
 
                       errorText.value = result;
                     },
-                    child: const Text('게시하기'),
+                    child:
+                        tweet != null ? const Text('수정하기') : const Text('게시하기'),
                   ),
                 ],
               ),

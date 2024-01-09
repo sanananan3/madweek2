@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:madcamp_week2/models/user_data.dart';
-import 'package:madcamp_week2/screens/tab1.dart';
-import 'package:madcamp_week2/screens/tab2.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:madcamp_week2/screens/profile_screen.dart';
-
+import 'package:madcamp_week2/screens/tab2.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({super.key});
@@ -15,20 +12,17 @@ class HomeScreen extends HookWidget {
 
     return Scaffold(
       body: IndexedStack(
-
         index: currentIndex.value,
         children: const [
           ProfileScreen(),
-          Tab2(user:widget.user),
+          Tab2(),
           Text('3'),
           Text('4'),
           Text('5'),
-
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex.value,
-        type: BottomNavigationBarType.fixed,
         onTap: (index) => currentIndex.value = index,
         items: const [
           BottomNavigationBarItem(

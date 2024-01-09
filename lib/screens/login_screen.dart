@@ -119,7 +119,11 @@ class LoginScreen extends HookConsumerWidget {
                               MaterialPageRoute(
                                 builder: (context) => AdditionalRegisterScreen(
                                   type: RegisterType.kakao,
-                                  data: {'kakao_id': kakaoUser.id},
+                                  data: {
+                                    'kakao_id': kakaoUser.id,
+                                    'name': kakaoUser
+                                        .kakaoAccount?.profile?.nickname,
+                                  },
                                 ),
                               ),
                             );

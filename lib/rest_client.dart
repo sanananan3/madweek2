@@ -9,28 +9,61 @@ part 'rest_client.g.dart';
 
 @RestApi()
 abstract class RestClient {
-  factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
+  factory RestClient(Dio dio) =>
+      _RestClient(dio, baseUrl: dotenv.env['SERVER_BASEURL']);
 
   @POST('/register')
-  Future<UserResponse> createUser(@Body() Map<String, dynamic> data);
+  Future<UserResponse> createUser(@Body() UserRequestBody data);
 
   @POST('/register/kakao')
-  Future<UserResponse> createUserByKakao(@Body() Map<String, dynamic> data);
+  Future<UserResponse> createUserByKakao(@Body() UserRequestBody data);
 
   @POST('/login')
-  Future<UserResponse> getUserById(@Body() Map<String, dynamic> data);
+  Future<UserResponse> getUserById(@Body() UserRequestBody data);
 
   @POST('/verify')
-  Future<UserResponse> getUserByToken(@Body() Map<String, dynamic> data);
+  Future<UserResponse> getUserByToken(@Body() UserRequestBody data);
+
+  @GET('/tweet')
+  Future<TweetsResponse> getTweets();
+
+  @GET('/tweet/my')
+  Future<TweetsResponse> getMyTweets();
 
   @POST('/tweet')
-  Future<TweetsResponse> getTweets(@Body() Map<String, dynamic> data);
+  Future<TweetsResponse> writeTweet(@Body() TweetRequestBody data);
 
-  @POST('/tweet/my')
-  Future<TweetsResponse> getMyTweets(@Body() Map<String, dynamic> data);
+  @PATCH('/tweet')
+  Future<TweetsResponse> editTweet(@Body() TweetRequestBody data);
 
-  @POST('/tweet/write')
-  Future<TweetsResponse> writeTweet(@Body() Map<String, dynamic> data);
+  @DELETE('/tweet')
+  Future<TweetsResponse> deleteTweet(@Body() TweetRequestBody data);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class UserRequestBody {
+  final String? userId;
+  final String? userPw;
+  final int? kakaoId;
+  final String? token;
+  final String? name;
+  final String? phone;
+  final String? birthDate;
+
+  const UserRequestBody({
+    this.userId,
+    this.userPw,
+    this.kakaoId,
+    this.token,
+    this.name,
+    this.phone,
+    this.birthDate,
+  });
+
+  factory UserRequestBody.fromJson(Map<String, dynamic> json) =>
+      _$UserRequestBodyFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserRequestBodyToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -48,6 +81,19 @@ class UserResponse {
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
+class TweetRequestBody {
+  final int? id;
+  final String? content;
+
+  const TweetRequestBody({this.id, this.content});
+
+  factory TweetRequestBody.fromJson(Map<String, dynamic> json) =>
+      _$TweetRequestBodyFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TweetRequestBodyToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class TweetsResponse {
   final bool success;
   final List<Tweet>? tweets;
@@ -60,5 +106,3 @@ class TweetsResponse {
 
   Map<String, dynamic> toJson() => _$TweetsResponseToJson(this);
 }
-
-final restClient = RestClient(Dio(), baseUrl: dotenv.env['SERVER_BASEURL']!);
