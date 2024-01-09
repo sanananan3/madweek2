@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:madcamp_week2/screens/additional_register_screen.dart';
 
-class RegisterScreen extends HookConsumerWidget {
+class RegisterScreen extends HookWidget {
   final _formKey = GlobalKey<FormState>();
 
   RegisterScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final currentIndex = useState(0);
     final idController = useTextEditingController();
     final pwController = useTextEditingController();

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:madcamp_week2/screens/profile_screen.dart';
 
-class HomeScreen extends HookConsumerWidget {
+class HomeScreen extends HookWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final currentIndex = useState(0);
 
     return Scaffold(
@@ -27,8 +26,8 @@ class HomeScreen extends HookConsumerWidget {
         onTap: (index) => currentIndex.value = index,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.abc),
-            label: 'Tap 1',
+            icon: Icon(Icons.person),
+            label: '프로필',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.abc),

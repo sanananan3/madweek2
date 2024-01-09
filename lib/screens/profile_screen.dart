@@ -54,8 +54,8 @@ class ProfileScreen extends ConsumerWidget {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push<void>(
+          onPressed: () async {
+            await Navigator.push<void>(
               context,
               MaterialPageRoute(
                 builder: (cnotext) => const TweetWriteScreen(),
