@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:madcamp_week2/screens/profile_screen.dart';
 import 'package:madcamp_week2/screens/recommend_screen.dart';
-import 'package:madcamp_week2/screens/tab2.dart';
+import 'package:madcamp_week2/screens/search_screen.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({super.key});
@@ -16,7 +16,7 @@ class HomeScreen extends HookWidget {
         index: currentIndex.value,
         children: const [
           RecommendScreen(),
-          Tab2(),
+          SearchScreen(),
           ProfileScreen(),
         ],
       ),

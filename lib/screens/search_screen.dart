@@ -6,8 +6,8 @@ import 'package:madcamp_week2/providers/yt_music.dart';
 import 'package:madcamp_week2/screens/userprofile.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class Tab2 extends HookConsumerWidget {
-  const Tab2({super.key});
+class SearchScreen extends HookConsumerWidget {
+  const SearchScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
