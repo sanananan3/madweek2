@@ -191,6 +191,14 @@ Server: Node.js
 추천 게시물들에 뜨는 애플리케이션에 가입한 모든 유저들의 게시물에 좋아요 버튼이 존재하는데, 좋아요 버튼을 누르게 되면 자신의 페이지의 마음에 들어요 함에 해당 게시물이 저장되게 된다.
 
 
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/37e20c1a-6453-4fa8-86b5-5b4cc806e66f" width = 20%, height = 20%>
+
+
+
+<br> 
+
+
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/2ef513d6-bd98-48df-b009-84025456dd54" width = 20%, height = 20%>
 
 
 <aside>
