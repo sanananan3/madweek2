@@ -89,6 +89,8 @@ Server: Node.js
  
 
  만약 회원가입이 되어 있는 경우의 사용자라면, 회원가입 버튼을 누르지 않고 바로 로그인으로 넘어갈 수 있다. 
+ <br>
+ 
 
 <img src = "https://github.com/sanananan3/madweek2/assets/127393132/e6687889-388d-4921-b829-496ec04d6c7d" width = 20%, height = 20%>
 
@@ -97,24 +99,33 @@ Server: Node.js
  
 
 <img src = "https://github.com/sanananan3/madweek2/assets/127393132/fbaae0d9-e99d-47cf-9396-aaf6eb5b5fe8" width = 20%, height = 20%>
+ <br>
 
-
+ 
 로그인을 완료한 사용자의 프로필 페이지가 나온다. 
 
 <aside>
 💡 포스팅
 
 </aside>
+ <br>
+
 
 <img src = "https://github.com/sanananan3/madweek2/assets/127393132/6c15f945-c4d1-40fc-91bb-3ae4de67e0b7" width = 20%, height = 20%>
 
 
+ <br>
 
+ 
 우측 하단의 + 아이콘을 누를 시에 새로운 포스트를 작성할 수 있다. 
 
+ <br>
 
+ 
 <img src = "https://github.com/sanananan3/madweek2/assets/127393132/8bb042d4-9f52-4ce8-b0d8-63bf5bc3cab1" width = 20%, height = 20%>
+ <br>
 
+ 
 <img src = "https://github.com/sanananan3/madweek2/assets/127393132/46de0aab-31dc-4ff4-b5b2-ef7bb2f8ad8f" width = 20%, height = 20%>
 
 
@@ -132,18 +143,24 @@ Server: Node.js
 
  검색 바에는 애플리케이션에 가입한 사용자의 ID 혹은 이름을 부분적으로 검색하여도 하단에 뜨게 되며 해당 텍스트를 누르게 되면 검색한 사용자의 프로필이 뜬다. 
 
+ <br>
 
+ 
 <img src = "https://github.com/sanananan3/madweek2/assets/127393132/e2c7906a-e09f-4766-9be1-aff0526a74cb" width = 20%, height = 20%>
 
 
 
 유튜브 인기 동영상이 뜸 
+ <br>
 
+ 
 <img src = "https://github.com/sanananan3/madweek2/assets/127393132/6b976ac7-e55e-4255-a47f-a70e50b2e777" width = 20%, height = 20%>
 
 애플리케이션에 가입한 사용자의 ID 혹은 이름을 부분적으로 검색하여도 하단에 뜸
 
+ <br>
 
+ 
 <img src = "https://github.com/sanananan3/madweek2/assets/127393132/6a59274d-145f-4c42-83a6-c7c1a263c01a" width = 20%, height = 20%>
 
 해당 사용자의 프로필이 뜨게 됨
@@ -152,7 +169,9 @@ Server: Node.js
 💡 추천 게시물
 
 </aside>
+ <br>
 
+ 
 
 
 <img src = "https://github.com/sanananan3/madweek2/assets/127393132/d3ff03cd-896d-4cb0-a30f-2de9dc1d8ace" width = 20%, height = 20%>
@@ -172,11 +191,15 @@ Server: Node.js
 💡 로그아웃
 
 </aside>
+ <br>
 
+ 
 <img src = "https://github.com/sanananan3/madweek2/assets/127393132/53d4707c-1c8c-4b13-b93b-3f57ab996ff3" width = 20%, height = 20%>
 우측 상단에 있는 로그아웃 버튼 
 
+ <br>
 
+ 
 <img src = "https://github.com/sanananan3/madweek2/assets/127393132/8ad8b399-0126-4d08-8831-bc890ca21154" width = 20%, height = 20%>
 
 
