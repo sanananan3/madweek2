@@ -16,6 +16,7 @@ exports.getLikes = async (req, res) => {
     const result = await db
       .select({
         ...getTableColumns(schema.tweets),
+        user: schema.users,
         like: exists(
           db
             .select({ value: 1 })
@@ -38,6 +39,7 @@ exports.getLikes = async (req, res) => {
             .where(eq(schema.likes.user_id, id))
         )
       )
+      .innerJoin(schema.users, eq(schema.tweets.user_id, schema.users.id))
       .orderBy(desc(schema.tweets.created_at));
 
     res.status(200).json({ success: true, tweets: result });

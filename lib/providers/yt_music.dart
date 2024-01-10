@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class YtMusicNotifier extends Notifier<String> {
+class YtMusicNotifier extends AutoDisposeNotifier<String> {
   final _random = Random();
   final _videoIds = [
     'D8VEhcPeSlc',
@@ -33,4 +33,4 @@ class YtMusicNotifier extends Notifier<String> {
 }
 
 final ytMusicNotifierProvider =
-    NotifierProvider<YtMusicNotifier, String>(YtMusicNotifier.new);
+    AutoDisposeNotifierProvider<YtMusicNotifier, String>(YtMusicNotifier.new);

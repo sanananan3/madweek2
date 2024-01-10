@@ -147,7 +147,21 @@ class ProfileScreen extends ConsumerWidget {
     int myId,
   ) {
     return TweetBlock(
-      tweet: tweet.userId != myId ? tweet.copyWith(user: user) : tweet,
+      tweet: tweet,
+      isMy: tweet.user!.id == myId,
+      onPressed: () async {
+        if (tweet.user!.id != myId) {
+          await Navigator.push<void>(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Scaffold(
+                appBar: AppBar(),
+                body: ProfileScreen(user: tweet.user!),
+              ),
+            ),
+          );
+        }
+      },
       onLikePressed: () async {
         if (tweet.like!) {
           await ref

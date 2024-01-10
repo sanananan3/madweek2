@@ -45,3 +45,5 @@ app.*.map.json
 # Node.js
 /server/node_modules
 /server/drizzle
+
+.env
