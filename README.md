@@ -31,10 +31,12 @@ CLICK 은 자신의 관심사를 포스팅하여 자신만의 페이지를 만�
 Language: Dart
 
 FrontEnd: Flutter
+  - State Management: Riverpod
 
-DataBase : PostgreSQL 
+DataBase : PostgreSQL
 
-Server: Node.js
+Server: Node.js(Express)
+  - ORM: drizzle
 
 ### **주요 기능**
 
