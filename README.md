@@ -28,15 +28,15 @@ CLICK 은 자신의 관심사를 포스팅하여 자신만의 페이지를 만�
 
 ---
 
-Language: Dart
+Language: Dart & JavaScript
 
-FrontEnd: Flutter
+Frontend: Flutter
   - State Management: Riverpod
 
-DataBase : PostgreSQL
-
-Server: Node.js(Express)
+Backend: Node.js(Express)
+  - DataBase: PostgreSQL
   - ORM: drizzle
+  - Cloud: Render Web Service & Render PostgreSQL
 
 ### **주요 기능**
 
