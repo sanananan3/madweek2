@@ -2,6 +2,7 @@ require('dotenv').config();
 require('./db');
 
 const middleware = require('./middleware');
+const likeController = require('./controllers/like');
 const tweetController = require('./controllers/tweet');
 const userController = require('./controllers/user');
 
@@ -22,11 +23,14 @@ app.post('/login', userController.login);
 app.post('/verify', userController.verify);
 app.post('/search', userController.search);
 
-app.get('/tweet', middleware.isAuthenticated, tweetController.getTweet);
-app.get('/tweet/my', middleware.isAuthenticated, tweetController.getMyTweet);
+app.get('/tweet', middleware.isAuthenticated, tweetController.getTweets);
+app.get('/tweet/my', middleware.isAuthenticated, tweetController.getMyTweets);
 app.post('/tweet', middleware.isAuthenticated, tweetController.writeTweet);
 app.patch('/tweet', middleware.isAuthenticated, tweetController.editTweet);
 app.delete('/tweet', middleware.isAuthenticated, tweetController.deleteTweet);
+
+app.get('/like', middleware.isAuthenticated, likeController.getMyLikes);
+app.post('/like', middleware.isAuthenticated, likeController.doLike);
 
 app.listen(app.get('port'), () => {
   console.log(

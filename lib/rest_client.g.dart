@@ -103,6 +103,24 @@ Map<String, dynamic> _$TweetsResponseToJson(TweetsResponse instance) =>
       'error': instance.error,
     };
 
+TweetWithUsersResponse _$TweetWithUsersResponseFromJson(
+        Map<String, dynamic> json) =>
+    TweetWithUsersResponse(
+      success: json['success'] as bool,
+      tweets: (json['tweets'] as List<dynamic>?)
+          ?.map((e) => TweetWithUser.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      error: json['error'] as String?,
+    );
+
+Map<String, dynamic> _$TweetWithUsersResponseToJson(
+        TweetWithUsersResponse instance) =>
+    <String, dynamic>{
+      'success': instance.success,
+      'tweets': instance.tweets,
+      'error': instance.error,
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -260,13 +278,13 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<TweetsResponse> getTweets() async {
+  Future<TweetWithUsersResponse> getTweets() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<TweetsResponse>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<TweetWithUsersResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -282,7 +300,7 @@ class _RestClient implements RestClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = TweetsResponse.fromJson(_result.data!);
+    final value = TweetWithUsersResponse.fromJson(_result.data!);
     return value;
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:madcamp_week2/screens/profile_screen.dart';
+import 'package:madcamp_week2/screens/recommend_screen.dart';
 import 'package:madcamp_week2/screens/tab2.dart';
 
 class HomeScreen extends HookWidget {
@@ -14,9 +15,9 @@ class HomeScreen extends HookWidget {
       body: IndexedStack(
         index: currentIndex.value,
         children: const [
-          ProfileScreen(),
+          RecommendScreen(),
           Tab2(),
-          Text('3'),
+          ProfileScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -24,16 +25,16 @@ class HomeScreen extends HookWidget {
         onTap: (index) => currentIndex.value = index,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '프로필',
+            icon: Icon(Icons.home),
+            label: '메인',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: '검색',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.thumb_up),
-            label: '추천 게시물',
+            icon: Icon(Icons.person),
+            label: '프로필',
           ),
         ],
       ),

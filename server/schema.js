@@ -31,3 +31,9 @@ exports.tweets = pgTable('tweets', {
     .notNull()
     .defaultNow(),
 });
+
+exports.likes = pgTable('likes', {
+  id: serial('id').primaryKey(),
+  user_id: integer('user_id').notNull(),
+  tweet_id: integer('tweet_id').notNull(),
+});

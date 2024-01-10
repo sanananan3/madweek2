@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:madcamp_week2/models/tweet.dart';
+import 'package:madcamp_week2/models/user.dart';
 import 'package:shimmer/shimmer.dart';
 
 class TweetBlock extends StatelessWidget {
   final Tweet? tweet;
+  final User? user;
   final VoidCallback? onPressed;
   final VoidCallback? onEditPressed;
   final VoidCallback? onDeletePressed;
 
   const TweetBlock({
     this.tweet,
+    this.user,
     this.onPressed,
     this.onEditPressed,
     this.onDeletePressed,
@@ -27,8 +30,8 @@ class TweetBlock extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Spacer(),
                 if (tweet == null)
                   Shimmer.fromColors(
                     baseColor: Colors.blueGrey.shade700,
@@ -43,36 +46,50 @@ class TweetBlock extends StatelessWidget {
                     ),
                   )
                 else ...[
+                  if (user != null) ...[
+                    Text(
+                      user!.name,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    Text(
+                      ' @ ${user!.userId ?? user!.kakaoId}',
+                    ),
+                    const Spacer(),
+                  ],
                   const Text('• '),
                   _buildDateText(tweet!.createdAt.toLocal()),
-                  PopupMenuButton(
-                    child: const Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Icon(
-                        Icons.more_vert,
-                        size: 16,
-                      ),
-                    ),
-                    itemBuilder: (context) => [
-                      PopupMenuItem<void>(
-                        onTap: onEditPressed,
-                        child: const ListTile(
-                          leading: Icon(Icons.edit),
-                          title: Text('수정'),
+                  if (user == null)
+                    PopupMenuButton(
+                      child: const Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Icon(
+                          Icons.more_vert,
+                          size: 16,
                         ),
                       ),
-                      PopupMenuItem<void>(
-                        onTap: onDeletePressed,
-                        child: const ListTile(
-                          leading: Icon(Icons.delete),
-                          title: Text('삭제'),
+                      itemBuilder: (context) => [
+                        PopupMenuItem<void>(
+                          onTap: onEditPressed,
+                          child: const ListTile(
+                            leading: Icon(Icons.edit),
+                            title: Text('수정'),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                        PopupMenuItem<void>(
+                          onTap: onDeletePressed,
+                          child: const ListTile(
+                            leading: Icon(Icons.delete),
+                            title: Text('삭제'),
+                          ),
+                        ),
+                      ],
+                    )
+                  else
+                    const SizedBox(width: 8),
                 ],
               ],
             ),
+            if (user != null) const SizedBox(height: 8),
             if (tweet == null)
               ...List.generate(
                 2,
@@ -90,7 +107,10 @@ class TweetBlock extends StatelessWidget {
                 ),
               )
             else
-              Text(tweet!.content),
+              Text(
+                tweet!.content,
+                style: const TextStyle(fontSize: 15),
+              ),
           ],
         ),
       ),
@@ -113,7 +133,7 @@ class TweetBlock extends StatelessWidget {
 
     return Text(
       formattedDate,
-      style: const TextStyle(fontSize: 13),
+      style: const TextStyle(fontSize: 14),
     );
   }
 }

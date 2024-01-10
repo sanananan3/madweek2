@@ -3,13 +3,17 @@ const { desc, eq, not } = require('drizzle-orm');
 const db = require('../db');
 const schema = require('../schema');
 
-exports.getTweet = async (req, res) => {
+exports.getTweets = async (req, res) => {
   try {
     const user_id = req.user.id;
     const result = await db
-      .select()
+      .select({
+        user: schema.users,
+        tweet: schema.tweets,
+      })
       .from(schema.tweets)
       .where(not(eq(schema.tweets.user_id, user_id)))
+      .innerJoin(schema.users, eq(schema.tweets.user_id, schema.users.id))
       .orderBy(desc(schema.tweets.created_at));
 
     res.status(200).json({ success: true, tweets: result });
@@ -18,7 +22,7 @@ exports.getTweet = async (req, res) => {
   }
 };
 
-exports.getMyTweet = async (req, res) => {
+exports.getMyTweets = async (req, res) => {
   try {
     const user_id = req.user.id;
     const result = await db

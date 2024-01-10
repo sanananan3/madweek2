@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:madcamp_week2/models/tweet.dart';
+import 'package:madcamp_week2/models/tweet_with_user.dart';
 import 'package:madcamp_week2/models/user.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -28,7 +29,7 @@ abstract class RestClient {
   Future<UsersResponse> getUsers(@Body() Map<String, dynamic> data);
 
   @GET('/tweet')
-  Future<TweetsResponse> getTweets();
+  Future<TweetWithUsersResponse> getTweets();
 
   @GET('/tweet/my')
   Future<TweetsResponse> getMyTweets();
@@ -136,4 +137,22 @@ class TweetsResponse {
       _$TweetsResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$TweetsResponseToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class TweetWithUsersResponse {
+  final bool success;
+  final List<TweetWithUser>? tweets;
+  final String? error;
+
+  const TweetWithUsersResponse({
+    required this.success,
+    this.tweets,
+    this.error,
+  });
+
+  factory TweetWithUsersResponse.fromJson(Map<String, dynamic> json) =>
+      _$TweetWithUsersResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TweetWithUsersResponseToJson(this);
 }
