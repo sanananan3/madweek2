@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:madcamp_week2/hooks/youtube_player_controller.dart';
 import 'package:madcamp_week2/providers/rest_client.dart';
 import 'package:madcamp_week2/providers/yt_music.dart';
+import 'package:madcamp_week2/screens/userprofile.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class Tab2 extends HookConsumerWidget {
@@ -55,7 +56,22 @@ class Tab2 extends HookConsumerWidget {
                         .getUsers({'search': search});
                     if (response.success) {
                       return response.users!
-                          .map((user) => ListTile(title: Text(user.name)))
+                          .map(
+                            (user) => ListTile(
+                              title: Text(
+                                '${user.name} @ ${user.userId ?? user.kakaoId}',
+                              ),
+                              onTap: () {
+                                Navigator.push<void>(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        UserProfilePage(user: user),
+                                  ),
+                                );
+                              },
+                            ),
+                          )
                           .toList();
                     }
                   } catch (error) {
