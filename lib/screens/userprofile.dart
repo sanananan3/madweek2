@@ -24,7 +24,7 @@ class _UserProfilePageState extends State<UserProfilePage> with SingleTickerProv
   @override
   Widget build(BuildContext context) {
     final formattedDate = DateFormat('yyyy년 MM월 dd일에 가입함').format(widget.user.createdAt.toLocal());
-    final formattedBirth = DateFormat('yyyy년 MM월 dd일에 가입함').format(widget.user.birthDate.toLocal());
+    final formattedBirth = DateFormat('yyyy년 MM월 dd일에 태어난').format(widget.user.birthDate.toLocal());
 
     return Scaffold(
       appBar: AppBar(

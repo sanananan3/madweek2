@@ -6,11 +6,12 @@ import 'package:madcamp_week2/providers/tweet.dart';
 import 'package:madcamp_week2/rest_client.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'dart:convert';
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:madcamp_week2/screens/userprofile.dart';
-
+import 'package:flutter_flip_card/flutter_flip_card.dart';
 
 class Tab2 extends StatefulWidget {
 
@@ -20,7 +21,13 @@ class Tab2 extends StatefulWidget {
 
 }
 
-class _SearchBarAppState extends State<Tab2> {
+class _SearchBarAppState extends State<Tab2>  with TickerProviderStateMixin {
+
+  final con = FlipCardController();
+  final cong1 = GestureFlipCardController();
+  late Timer autoFlipTimer;
+  bool isCardFlipped = false;
+
 
 
 
@@ -44,6 +51,12 @@ class _SearchBarAppState extends State<Tab2> {
   void initState() {
     super.initState();
     _searchController = SearchController();
+
+    autoFlipTimer = Timer.periodic(Duration( seconds: 1), (timer) {
+      setState(() {
+        isCardFlipped = !isCardFlipped;
+      });
+    });
   }
 
   void changeVideo(){
@@ -172,14 +185,258 @@ class _SearchBarAppState extends State<Tab2> {
             Text(
               '   나를 위한 실시간 트렌드' , style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
             ),
-          ],
-        ),
+            SizedBox(height:20),
+            Text('    대한민국에서 트렌드 중', style: TextStyle(fontSize: 12, color:Colors.white70,fontWeight: FontWeight.w100)),
+            SizedBox(height:20),
 
+
+            AnimatedSwitcher(
+              duration: Duration(milliseconds: 1000),
+              child: isCardFlipped
+                  ? Container(
+                key: UniqueKey(),
+                height: 30,
+                width: 400,
+                child: Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationY(pi*180), // Flip the card
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue, // Adjust the color as needed
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '    과자파티',
+                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+                  : Container(
+                key: UniqueKey(),
+                height: 30,
+                width: 400,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue, // Adjust the color as needed
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '    제주항공',
+                      style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height:20),
+            Text('    Only on X 실시간 트렌드', style: TextStyle(fontSize: 12, color:Colors.white70,fontWeight: FontWeight.w300)),
+            SizedBox(height:20),
+
+
+
+            AnimatedSwitcher(
+              duration: Duration(milliseconds: 900),
+              child: isCardFlipped
+                  ? Container(
+                key: UniqueKey(),
+                height: 30,
+                width: 400,
+                child: Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationY(pi*180), // Flip the card
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue, // Adjust the color as needed
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '    솔로지옥',
+                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+                  : Container(
+                key: UniqueKey(),
+                height: 30,
+                width: 400,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue, // Adjust the color as needed
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '    환승연애',
+                      style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            SizedBox(height:20),
+            Text('    대한민국에서 트렌드 중', style: TextStyle(fontSize: 12, color:Colors.white70,fontWeight: FontWeight.w100)),
+            SizedBox(height:20),
+
+
+
+            AnimatedSwitcher(
+              duration: Duration(milliseconds: 1100),
+              child: isCardFlipped
+                  ? Container(
+                key: UniqueKey(),
+                height: 30,
+                width: 400,
+                child: Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationY(pi*180), // Flip the card
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue, // Adjust the color as needed
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '    대설주의보',
+                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+                  : Container(
+                key: UniqueKey(),
+                height: 30,
+                width: 400,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue, // Adjust the color as needed
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '    잇츠라이브',
+                      style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height:20),
+            Text('    대한민국에서 트렌드 중', style: TextStyle(fontSize: 12, color:Colors.white70,fontWeight: FontWeight.w100)),
+            SizedBox(height:20),
+
+
+
+            AnimatedSwitcher(
+              duration: Duration(milliseconds: 1000),
+              child: isCardFlipped
+                  ? Container(
+                key: UniqueKey(),
+                height: 30,
+                width: 400,
+                child: Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationY(pi*180), // Flip the card
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue, // Adjust the color as needed
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '    누나 잠들면 안대',
+                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+                  : Container(
+                key: UniqueKey(),
+                height: 30,
+                width: 400,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue, // Adjust the color as needed
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '    #LALISA',
+                      style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height:20),
+            Text('    패션, 뷰티 실시간 트렌드', style: TextStyle(fontSize: 12, color:Colors.white70,fontWeight: FontWeight.w100)),
+            SizedBox(height:20),
+
+
+
+            AnimatedSwitcher(
+              duration: Duration(milliseconds: 900),
+              child: isCardFlipped
+                  ? Container(
+                key: UniqueKey(),
+                height: 30,
+                width: 400,
+                child: Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationY(pi*180), // Flip the card
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue, // Adjust the color as needed
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '    쌍계피지떡',
+                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+                  : Container(
+                key: UniqueKey(),
+                height: 30,
+                width: 400,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue, // Adjust the color as needed
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '    좌석 추첨',
+                      style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height:40),
+
+
+
+
+          ],
           ),
         ),
-
-          );
+      ),
+    );
   }
+
 
   void _openUserProfilePage(User user) {
     Navigator.push(

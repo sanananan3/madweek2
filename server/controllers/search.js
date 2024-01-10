@@ -12,7 +12,7 @@ exports.getSearch = async (req, res) => {
       .from(schema.users)
       .where(
         or(
-          eq(schema.users.user_id, userId%),
+          eq(schema.users.user_id, userId),
           eq(schema.users.name, name),
           eq(schema.users.phone, phone)
         )
