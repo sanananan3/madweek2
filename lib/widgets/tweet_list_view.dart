@@ -6,7 +6,7 @@ import 'package:madcamp_week2/widgets/tweet_block.dart';
 class TweetListView extends StatelessWidget {
   final AsyncValue<List<Tweet>?> asyncValue;
   final RefreshCallback onRefresh;
-  final TweetBlock? Function(BuildContext, Tweet) builder;
+  final Widget? Function(BuildContext, Tweet) builder;
 
   const TweetListView({
     required this.asyncValue,
@@ -20,16 +20,14 @@ class TweetListView extends StatelessWidget {
     return switch (asyncValue) {
       AsyncData(:final value) when value != null => RefreshIndicator(
           onRefresh: onRefresh,
-          child: ListView.separated(
+          child: ListView.builder(
             itemCount: value.length,
             itemBuilder: (context, index) => builder(context, value[index]),
-            separatorBuilder: (context, index) => const Divider(),
           ),
         ),
-      _ => ListView.separated(
+      _ => ListView.builder(
           itemCount: 5,
           itemBuilder: (context, index) => const TweetBlock(),
-          separatorBuilder: (context, index) => const Divider(),
         ),
     };
   }

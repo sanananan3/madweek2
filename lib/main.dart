@@ -29,7 +29,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'MapCamp Week 2',
       theme: _buildThemeData(),
       home: switch (ref.watch(userNotifierProvider)) {
         AsyncData(:final value) when value != null => const HomeScreen(),

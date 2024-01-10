@@ -137,7 +137,7 @@ class SearchScreen extends HookConsumerWidget {
           ),
           const SizedBox(height: 20),
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 1000),
+            duration: const Duration(seconds: 1),
             child: isCardFlipped.value
                 ? SizedBox(
                     height: 30,
@@ -195,7 +195,7 @@ class SearchScreen extends HookConsumerWidget {
           ),
           const SizedBox(height: 20),
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 900),
+            duration: const Duration(seconds: 1),
             child: isCardFlipped.value
                 ? SizedBox(
                     height: 30,
@@ -253,7 +253,7 @@ class SearchScreen extends HookConsumerWidget {
           ),
           const SizedBox(height: 20),
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 1100),
+            duration: const Duration(seconds: 1),
             child: isCardFlipped.value
                 ? SizedBox(
                     height: 30,
@@ -311,7 +311,7 @@ class SearchScreen extends HookConsumerWidget {
           ),
           const SizedBox(height: 20),
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 1000),
+            duration: const Duration(seconds: 1),
             child: isCardFlipped.value
                 ? SizedBox(
                     height: 30,
@@ -369,7 +369,7 @@ class SearchScreen extends HookConsumerWidget {
           ),
           const SizedBox(height: 20),
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 900),
+            duration: const Duration(seconds: 1),
             child: isCardFlipped.value
                 ? SizedBox(
                     height: 30,

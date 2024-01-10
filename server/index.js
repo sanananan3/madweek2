@@ -9,7 +9,6 @@ const userController = require('./controllers/user');
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const express = require('express');
-const os = require('os');
 const app = express();
 
 app.set('port', process.env.PORT || 8000);
@@ -35,8 +34,7 @@ app.delete('/like', middleware.isAuthenticated, likeController.cancelLike);
 
 app.listen(app.get('port'), () => {
   console.log(
-    '  Server is running at %s:%d in %s mode',
-    os.networkInterfaces()['en0'].find((e) => e.family === 'IPv4').address,
+    '  Server is running at port %d in %s mode',
     app.get('port'),
     app.get('env')
   );

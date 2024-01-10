@@ -139,7 +139,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  TweetBlock _buildTweetBlock(
+  Widget _buildTweetBlock(
     BuildContext context,
     WidgetRef ref,
     Tweet tweet,

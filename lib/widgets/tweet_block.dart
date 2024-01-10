@@ -21,111 +21,119 @@ class TweetBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPressed ?? () {},
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 12, 4, 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (tweet?.user != null) const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                if (tweet == null)
-                  Shimmer.fromColors(
-                    baseColor: Colors.blueGrey.shade700,
-                    highlightColor: Colors.blueGrey.shade900,
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 4,
+      ),
+      child: Card(
+        color: const Color(0xFF1C1E20),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 12, 4, 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (tweet?.user != null) const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (tweet == null)
+                    Shimmer.fromColors(
+                      baseColor: Colors.grey.shade700,
+                      highlightColor: Colors.grey.shade900,
+                      child: Container(
+                        width: 100,
+                        height: 16,
+                        margin: const EdgeInsets.only(right: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  else ...[
+                    if (tweet!.user != null) ...[
+                      Text(
+                        tweet!.user!.name,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      Text(
+                        ' @${tweet!.user!.userId ?? tweet!.user!.kakaoId}',
+                      ),
+                      const Spacer(),
+                    ],
+                    const Text('• '),
+                    _buildDateText(tweet!.createdAt.toLocal()),
+                    if (tweet!.user == null)
+                      PopupMenuButton(
+                        child: const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Icon(
+                            Icons.more_vert,
+                            size: 16,
+                          ),
+                        ),
+                        itemBuilder: (context) => [
+                          PopupMenuItem<void>(
+                            onTap: onEditPressed,
+                            child: const ListTile(
+                              leading: Icon(Icons.edit),
+                              title: Text('수정'),
+                            ),
+                          ),
+                          PopupMenuItem<void>(
+                            onTap: onDeletePressed,
+                            child: const ListTile(
+                              leading: Icon(Icons.delete),
+                              title: Text('삭제'),
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      const SizedBox(width: 8),
+                  ],
+                ],
+              ),
+              if (tweet == null)
+                ...List.generate(
+                  2,
+                  (_) => Shimmer.fromColors(
+                    baseColor: Colors.grey.shade700,
+                    highlightColor: Colors.grey.shade900,
                     child: Container(
-                      width: 100,
-                      height: 16,
-                      margin: const EdgeInsets.only(right: 8),
+                      height: 14,
+                      margin: const EdgeInsets.only(top: 8, right: 8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(2),
                         color: Colors.white,
                       ),
                     ),
-                  )
-                else ...[
-                  if (tweet!.user != null) ...[
-                    Text(
-                      tweet!.user!.name,
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    Text(
-                      ' @ ${tweet!.user!.userId ?? tweet!.user!.kakaoId}',
-                    ),
-                    const Spacer(),
-                  ],
-                  const Text('• '),
-                  _buildDateText(tweet!.createdAt.toLocal()),
-                  if (tweet!.user == null)
-                    PopupMenuButton(
-                      child: const Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Icon(
-                          Icons.more_vert,
-                          size: 16,
-                        ),
-                      ),
-                      itemBuilder: (context) => [
-                        PopupMenuItem<void>(
-                          onTap: onEditPressed,
-                          child: const ListTile(
-                            leading: Icon(Icons.edit),
-                            title: Text('수정'),
-                          ),
-                        ),
-                        PopupMenuItem<void>(
-                          onTap: onDeletePressed,
-                          child: const ListTile(
-                            leading: Icon(Icons.delete),
-                            title: Text('삭제'),
-                          ),
-                        ),
-                      ],
-                    )
-                  else
-                    const SizedBox(width: 8),
-                ],
-              ],
-            ),
-            if (tweet == null)
-              ...List.generate(
-                2,
-                (_) => Shimmer.fromColors(
-                  baseColor: Colors.blueGrey.shade700,
-                  highlightColor: Colors.blueGrey.shade900,
-                  child: Container(
-                    height: 14,
-                    margin: const EdgeInsets.only(top: 8, right: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
-                      color: Colors.white,
-                    ),
                   ),
+                )
+              else ...[
+                const SizedBox(height: 8),
+                Text(
+                  tweet!.content,
+                  style: const TextStyle(fontSize: 15),
                 ),
-              )
-            else ...[
-              const SizedBox(height: 8),
-              Text(
-                tweet!.content,
-                style: const TextStyle(fontSize: 15),
-              ),
+              ],
+              if (tweet?.user != null && tweet?.like != null)
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    onPressed: onLikePressed,
+                    icon: tweet!.like!
+                        ? const Icon(Icons.favorite)
+                        : const Icon(Icons.favorite_outline),
+                    iconSize: 20,
+                  ),
+                )
+              else
+                const SizedBox(height: 8),
             ],
-            if (tweet?.user != null && tweet?.like != null)
-              Align(
-                alignment: Alignment.centerRight,
-                child: IconButton(
-                  onPressed: onLikePressed,
-                  icon: tweet!.like!
-                      ? const Icon(Icons.favorite)
-                      : const Icon(Icons.favorite_outline),
-                  iconSize: 20,
-                ),
-              ),
-          ],
+          ),
         ),
       ),
     );
