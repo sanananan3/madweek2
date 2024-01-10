@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +7,7 @@ import 'package:madcamp_week2/providers/tweet.dart';
 import 'package:madcamp_week2/providers/user.dart';
 import 'package:madcamp_week2/screens/tweet_write_screen.dart';
 import 'package:madcamp_week2/widgets/tweet_block.dart';
+import 'package:madcamp_week2/widgets/tweet_list_view.dart';
 
 class ProfileScreen extends ConsumerWidget {
   final User user;
@@ -26,189 +25,140 @@ class ProfileScreen extends ConsumerWidget {
 
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        floatingActionButton: user.id != myId
-            ? null
-            : FloatingActionButton(
-                onPressed: () async {
-                  await Navigator.push<void>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (cnotext) => const TweetWriteScreen(),
-                    ),
-                  );
-                },
-                shape: const CircleBorder(),
-                child: const Icon(Icons.add),
-              ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    formmatedBirth,
-                    style: const TextStyle(
-                      color: Color.fromARGB(137, 34, 34, 34),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                    ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  formmatedBirth,
+                  style: const TextStyle(
+                    color: Color.fromARGB(137, 34, 34, 34),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
                   ),
-                  Text(
-                    user.name,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+                ),
+                Text(
+                  user.name,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
                   ),
-                  Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            ' @ ${user.userId ?? user.kakaoId}',
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w300,
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          ' @ ${user.userId ?? user.kakaoId}',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.calendar_month_outlined,
+                              size: 16,
                             ),
-                          ),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.calendar_month_outlined,
-                                size: 16,
+                            const SizedBox(width: 4),
+                            Text(
+                              formattedDate,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
                               ),
-                              const SizedBox(width: 4),
-                              Text(
-                                formattedDate,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text('프로필 수정'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text('팔로워'),
-                      ),
-                      const SizedBox(width: 32),
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text('팔로잉'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            const TabBar(
-              indicatorSize: TabBarIndicatorSize.tab,
-              labelStyle: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 13,
-              ),
-              tabs: [
-                Tab(text: '게시물'),
-                Tab(text: '마음에 들어요'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                /*
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text('팔로워'),
+                    ),
+                    const SizedBox(width: 32),
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text('팔로잉'),
+                    ),
+                  ],
+                ),*/
               ],
             ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  switch (ref.watch(tweetsNotifierProvider(user.id))) {
-                    AsyncData(:final value) when value != null =>
-                      RefreshIndicator(
-                        onRefresh: () => ref
-                            .read(tweetsNotifierProvider(user.id).notifier)
-                            .refresh(),
-                        child: ListView.separated(
-                          itemCount: value.length,
-                          itemBuilder: (context, index) => _buildTweetBlock(
-                            context,
-                            ref,
-                            value[index],
-                            myId,
-                          ),
-                          separatorBuilder: (context, index) => const Divider(),
-                        ),
-                      ),
-                    _ => ListView.separated(
-                        itemCount: 5,
-                        itemBuilder: (context, index) => const TweetBlock(),
-                        separatorBuilder: (context, index) => const Divider(),
-                      ),
-                  },
-                  GridView.builder(
-                    itemCount: 1000,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                    ),
-                    itemBuilder: (context, index) {
-                      final number = <int>[
-                        Random().nextInt(255),
-                        Random().nextInt(255),
-                        Random().nextInt(255),
-                      ];
-                      return ColoredBox(
-                        color: Color.fromRGBO(
-                          number[0],
-                          number[1],
-                          number[2],
-                          1,
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Grid View $index',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+          ),
+          const SizedBox(height: 8),
+          const TabBar(
+            indicatorSize: TabBarIndicatorSize.tab,
+            labelStyle: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
             ),
-          ],
-        ),
+            tabs: [
+              Tab(text: '게시물'),
+              Tab(text: '마음에 들어요'),
+            ],
+          ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                TweetListView(
+                  asyncValue: ref.watch(tweetsNotifierProvider(user.id)),
+                  onRefresh: () => ref
+                      .read(tweetsNotifierProvider(user.id).notifier)
+                      .refresh(),
+                  builder: (context, tweet) =>
+                      _buildTweetBlock(context, ref, tweet, user.id, myId),
+                ),
+                TweetListView(
+                  asyncValue: ref.watch(tweetsNotifierProvider(-user.id)),
+                  onRefresh: () => ref
+                      .read(tweetsNotifierProvider(-user.id).notifier)
+                      .refresh(),
+                  builder: (context, tweet) =>
+                      _buildTweetBlock(context, ref, tweet, -user.id, myId),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildTweetBlock(
+  TweetBlock _buildTweetBlock(
     BuildContext context,
     WidgetRef ref,
     Tweet tweet,
+    int userId,
     int myId,
   ) {
     return TweetBlock(
-      tweet: tweet,
-      user: user.id != myId ? user : null,
+      tweet: tweet.userId != myId ? tweet.copyWith(user: user) : tweet,
+      onLikePressed: () async {
+        if (tweet.like!) {
+          await ref
+              .read(tweetsNotifierProvider(userId).notifier)
+              .cancelLikeTweet(tweet.id);
+        } else {
+          await ref
+              .read(tweetsNotifierProvider(userId).notifier)
+              .doLikeTweet(tweet.id);
+        }
+      },
       onEditPressed: () async {
         await Navigator.push<void>(
           context,
@@ -237,7 +187,7 @@ class ProfileScreen extends ConsumerWidget {
             ) ??
             false) {
           await ref
-              .read(tweetsNotifierProvider(user.id).notifier)
+              .read(tweetsNotifierProvider(userId).notifier)
               .deleteTweet(tweet.id);
         }
       },

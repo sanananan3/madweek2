@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:madcamp_week2/models/tweet.dart';
-import 'package:madcamp_week2/models/tweet_with_user.dart';
 import 'package:madcamp_week2/models/user.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -29,10 +28,10 @@ abstract class RestClient {
   Future<UsersResponse> getUsers(@Body() Map<String, dynamic> data);
 
   @GET('/tweet')
-  Future<TweetsResponse> getTweetsByUserId(@Body() Map<String, dynamic> data);
+  Future<TweetsResponse> getTweetsByUserId(@Body() UserRequestBody data);
 
   @GET('/tweet/new')
-  Future<TweetWithUsersResponse> getNewTweets();
+  Future<TweetsResponse> getNewTweets();
 
   @POST('/tweet')
   Future<TweetResponse> writeTweet(@Body() TweetRequestBody data);
@@ -42,10 +41,32 @@ abstract class RestClient {
 
   @DELETE('/tweet')
   Future<TweetResponse> deleteTweet(@Body() TweetRequestBody data);
+
+  @GET('/like')
+  Future<TweetsResponse> getLikesByUserId(@Body() UserRequestBody data);
+
+  @POST('/like')
+  Future<BaseResponse> doLikeByTweetId(@Body() TweetRequestBody data);
+
+  @DELETE('/like')
+  Future<BaseResponse> cancelLikeByTweetId(@Body() TweetRequestBody data);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class BaseResponse {
+  final bool success;
+
+  const BaseResponse({required this.success});
+
+  factory BaseResponse.fromJson(Map<String, dynamic> json) =>
+      _$BaseResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BaseResponseToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class UserRequestBody {
+  final int? id;
   final String? userId;
   final String? userPw;
   final int? kakaoId;
@@ -55,6 +76,7 @@ class UserRequestBody {
   final String? birthDate;
 
   const UserRequestBody({
+    this.id,
     this.userId,
     this.userPw,
     this.kakaoId,
@@ -71,30 +93,30 @@ class UserRequestBody {
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class UserResponse {
-  final bool success;
+class UserResponse extends BaseResponse {
   final User? user;
   final String? error;
 
-  const UserResponse({required this.success, this.user, this.error});
+  const UserResponse({required super.success, this.user, this.error});
 
   factory UserResponse.fromJson(Map<String, dynamic> json) =>
       _$UserResponseFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$UserResponseToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class UsersResponse {
-  final bool success;
+class UsersResponse extends BaseResponse {
   final List<User>? users;
   final String? error;
 
-  const UsersResponse({required this.success, this.users, this.error});
+  const UsersResponse({required super.success, this.users, this.error});
 
   factory UsersResponse.fromJson(Map<String, dynamic> json) =>
       _$UsersResponseFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$UsersResponseToJson(this);
 }
 
@@ -112,47 +134,29 @@ class TweetRequestBody {
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class TweetResponse {
-  final bool success;
+class TweetResponse extends BaseResponse {
   final Tweet? tweet;
   final String? error;
 
-  const TweetResponse({required this.success, this.tweet, this.error});
+  const TweetResponse({required super.success, this.tweet, this.error});
 
   factory TweetResponse.fromJson(Map<String, dynamic> json) =>
       _$TweetResponseFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$TweetResponseToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class TweetsResponse {
-  final bool success;
+class TweetsResponse extends BaseResponse {
   final List<Tweet>? tweets;
   final String? error;
 
-  const TweetsResponse({required this.success, this.tweets, this.error});
+  const TweetsResponse({required super.success, this.tweets, this.error});
 
   factory TweetsResponse.fromJson(Map<String, dynamic> json) =>
       _$TweetsResponseFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$TweetsResponseToJson(this);
-}
-
-@JsonSerializable(fieldRename: FieldRename.snake)
-class TweetWithUsersResponse {
-  final bool success;
-  final List<TweetWithUser>? tweets;
-  final String? error;
-
-  const TweetWithUsersResponse({
-    required this.success,
-    this.tweets,
-    this.error,
-  });
-
-  factory TweetWithUsersResponse.fromJson(Map<String, dynamic> json) =>
-      _$TweetWithUsersResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$TweetWithUsersResponseToJson(this);
 }

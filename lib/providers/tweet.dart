@@ -11,7 +11,11 @@ class TweetsNotifier extends AutoDisposeFamilyAsyncNotifier<List<Tweet>?, int> {
   FutureOr<List<Tweet>?> build(int arg) async {
     try {
       final restClient = ref.watch(restClientProvider);
-      final response = await restClient.getTweetsByUserId({'user_id': arg});
+      final response = switch (arg) {
+        0 => await restClient.getNewTweets(),
+        < 0 => await restClient.getLikesByUserId(UserRequestBody(id: -arg)),
+        _ => await restClient.getTweetsByUserId(UserRequestBody(id: arg)),
+      };
       if (response.success) {
         return response.tweets;
       }
@@ -70,16 +74,47 @@ class TweetsNotifier extends AutoDisposeFamilyAsyncNotifier<List<Tweet>?, int> {
     }
     return '알 수 없는 오류가 발생했습니다.';
   }
-}
 
-final newTweetsProvider = FutureProvider.autoDispose((ref) async {
-  final restClient = ref.watch(restClientProvider);
-  final response = await restClient.getNewTweets();
-  if (response.success) {
-    return response.tweets;
+  Future<String?> doLikeTweet(int id) async {
+    try {
+      final restClient = ref.read(restClientProvider);
+      final response =
+          await restClient.doLikeByTweetId(TweetRequestBody(id: id));
+      if (response.success) {
+        return null;
+      }
+    } on DioException catch (error) {
+      return error.message;
+    } finally {
+      state = AsyncData([
+        for (final tweet in state.value!)
+          if (tweet.id == id) tweet.copyWith(like: true) else tweet,
+      ]);
+    }
+    return '알 수 없는 오류가 발생했습니다.';
   }
-  return null;
-});
+
+  Future<String?> cancelLikeTweet(int id) async {
+    try {
+      final restClient = ref.read(restClientProvider);
+      final response =
+          await restClient.cancelLikeByTweetId(TweetRequestBody(id: id));
+      if (response.success) {
+        return null;
+      }
+    } on DioException catch (error) {
+      return error.message;
+    } finally {
+      state = arg < 0
+          ? AsyncData(state.value!.where((tweet) => tweet.id != id).toList())
+          : AsyncData([
+              for (final tweet in state.value!)
+                if (tweet.id == id) tweet.copyWith(like: false) else tweet,
+            ]);
+    }
+    return '알 수 없는 오류가 발생했습니다.';
+  }
+}
 
 final tweetsNotifierProvider =
     AutoDisposeAsyncNotifierProviderFamily<TweetsNotifier, List<Tweet>?, int>(

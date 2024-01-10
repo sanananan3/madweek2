@@ -20,10 +20,15 @@ class SearchScreen extends HookConsumerWidget {
       flags: const YoutubePlayerFlags(mute: true, startAt: 59),
     );
     final isCardFlipped = useState(false);
-    useRef(
-      Timer.periodic(const Duration(seconds: 1), (timer) {
-        isCardFlipped.value = !isCardFlipped.value;
-      }),
+    useEffect(
+      () {
+        final timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+          isCardFlipped.value = !isCardFlipped.value;
+        });
+
+        return timer.cancel;
+      },
+      [],
     );
 
     ref.listen(
@@ -44,6 +49,7 @@ class SearchScreen extends HookConsumerWidget {
                   enabled: false,
                   decoration: InputDecoration(
                     filled: true,
+                    isDense: true,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(32),
                       borderSide: BorderSide.none,

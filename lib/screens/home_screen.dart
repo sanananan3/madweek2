@@ -11,8 +11,13 @@ class HomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentIndex = useState(0);
     final user = ref.watch(userNotifierProvider).value!;
+    final currentIndex = useState(0);
+    final screens = useRef([
+      const RecommendScreen(),
+      const SearchScreen(),
+      ProfileScreen(user: user),
+    ]);
 
     return Scaffold(
       appBar: AppBar(
@@ -45,14 +50,7 @@ class HomeScreen extends HookConsumerWidget {
           ),
         ],
       ),
-      body: IndexedStack(
-        index: currentIndex.value,
-        children: [
-          const RecommendScreen(),
-          const SearchScreen(),
-          ProfileScreen(user: user),
-        ],
-      ),
+      body: screens.value.elementAt(currentIndex.value),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex.value,
         onTap: (index) => currentIndex.value = index,

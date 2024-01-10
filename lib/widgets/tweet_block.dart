@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:madcamp_week2/models/tweet.dart';
-import 'package:madcamp_week2/models/user.dart';
 import 'package:shimmer/shimmer.dart';
 
 class TweetBlock extends StatelessWidget {
   final Tweet? tweet;
-  final User? user;
-  final bool? liked;
   final VoidCallback? onPressed;
   final VoidCallback? onLikePressed;
   final VoidCallback? onEditPressed;
@@ -15,8 +12,6 @@ class TweetBlock extends StatelessWidget {
 
   const TweetBlock({
     this.tweet,
-    this.user,
-    this.liked,
     this.onPressed,
     this.onLikePressed,
     this.onEditPressed,
@@ -34,7 +29,7 @@ class TweetBlock extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (user != null) const SizedBox(height: 8),
+            if (tweet?.user != null) const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -53,19 +48,19 @@ class TweetBlock extends StatelessWidget {
                     ),
                   )
                 else ...[
-                  if (user != null) ...[
+                  if (tweet!.user != null) ...[
                     Text(
-                      user!.name,
+                      tweet!.user!.name,
                       style: const TextStyle(fontSize: 14),
                     ),
                     Text(
-                      ' @ ${user!.userId ?? user!.kakaoId}',
+                      ' @ ${tweet!.user!.userId ?? tweet!.user!.kakaoId}',
                     ),
                     const Spacer(),
                   ],
                   const Text('• '),
                   _buildDateText(tweet!.createdAt.toLocal()),
-                  if (user == null)
+                  if (tweet!.user == null)
                     PopupMenuButton(
                       child: const Padding(
                         padding: EdgeInsets.all(8),
@@ -96,7 +91,6 @@ class TweetBlock extends StatelessWidget {
                 ],
               ],
             ),
-            if (user != null) const SizedBox(height: 8),
             if (tweet == null)
               ...List.generate(
                 2,
@@ -113,17 +107,19 @@ class TweetBlock extends StatelessWidget {
                   ),
                 ),
               )
-            else
+            else ...[
+              const SizedBox(height: 8),
               Text(
                 tweet!.content,
                 style: const TextStyle(fontSize: 15),
               ),
-            if (user != null)
+            ],
+            if (tweet?.user != null && tweet?.like != null)
               Align(
                 alignment: Alignment.centerRight,
                 child: IconButton(
                   onPressed: onLikePressed,
-                  icon: (liked != null && liked!)
+                  icon: tweet!.like!
                       ? const Icon(Icons.favorite)
                       : const Icon(Icons.favorite_outline),
                   iconSize: 20,

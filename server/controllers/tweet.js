@@ -1,15 +1,29 @@
-const { desc, eq, not } = require('drizzle-orm');
+const { and, desc, eq, exists, getTableColumns, not } = require('drizzle-orm');
 
 const db = require('../db');
 const schema = require('../schema');
 
 exports.getTweets = async (req, res) => {
   try {
-    const { user_id } = req.body;
+    const user_id = req.user.id;
+    const { id } = req.body;
     const result = await db
-      .select()
+      .select({
+        ...getTableColumns(schema.tweets),
+        like: exists(
+          db
+            .select({ value: 1 })
+            .from(schema.likes)
+            .where(
+              and(
+                eq(schema.likes.user_id, user_id),
+                eq(schema.likes.tweet_id, schema.tweets.id)
+              )
+            )
+        ),
+      })
       .from(schema.tweets)
-      .where(eq(schema.tweets.user_id, user_id))
+      .where(eq(schema.tweets.user_id, id))
       .orderBy(desc(schema.tweets.created_at));
 
     res.status(200).json({ success: true, tweets: result });
@@ -23,8 +37,19 @@ exports.getNewTweets = async (req, res) => {
     const user_id = req.user.id;
     const result = await db
       .select({
+        ...getTableColumns(schema.tweets),
         user: schema.users,
-        tweet: schema.tweets,
+        like: exists(
+          db
+            .select({ value: 1 })
+            .from(schema.likes)
+            .where(
+              and(
+                eq(schema.likes.user_id, user_id),
+                eq(schema.likes.tweet_id, schema.tweets.id)
+              )
+            )
+        ),
       })
       .from(schema.tweets)
       .where(not(eq(schema.tweets.user_id, user_id)))

@@ -24,6 +24,8 @@ mixin _$Tweet {
   String get content => throw _privateConstructorUsedError;
   int get userId => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
+  User? get user => throw _privateConstructorUsedError;
+  bool? get like => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +37,13 @@ abstract class $TweetCopyWith<$Res> {
   factory $TweetCopyWith(Tweet value, $Res Function(Tweet) then) =
       _$TweetCopyWithImpl<$Res, Tweet>;
   @useResult
-  $Res call({int id, String content, int userId, DateTime createdAt});
+  $Res call(
+      {int id,
+      String content,
+      int userId,
+      DateTime createdAt,
+      User? user,
+      bool? like});
 }
 
 /// @nodoc
@@ -55,6 +63,8 @@ class _$TweetCopyWithImpl<$Res, $Val extends Tweet>
     Object? content = null,
     Object? userId = null,
     Object? createdAt = null,
+    Object? user = freezed,
+    Object? like = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -73,6 +83,14 @@ class _$TweetCopyWithImpl<$Res, $Val extends Tweet>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      user: freezed == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User?,
+      like: freezed == like
+          ? _value.like
+          : like // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -84,7 +102,13 @@ abstract class _$$TweetImplCopyWith<$Res> implements $TweetCopyWith<$Res> {
       __$$TweetImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, String content, int userId, DateTime createdAt});
+  $Res call(
+      {int id,
+      String content,
+      int userId,
+      DateTime createdAt,
+      User? user,
+      bool? like});
 }
 
 /// @nodoc
@@ -102,6 +126,8 @@ class __$$TweetImplCopyWithImpl<$Res>
     Object? content = null,
     Object? userId = null,
     Object? createdAt = null,
+    Object? user = freezed,
+    Object? like = freezed,
   }) {
     return _then(_$TweetImpl(
       id: null == id
@@ -120,6 +146,14 @@ class __$$TweetImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      user: freezed == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User?,
+      like: freezed == like
+          ? _value.like
+          : like // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -132,7 +166,9 @@ class _$TweetImpl implements _Tweet {
       {required this.id,
       required this.content,
       required this.userId,
-      required this.createdAt});
+      required this.createdAt,
+      this.user,
+      this.like});
 
   factory _$TweetImpl.fromJson(Map<String, dynamic> json) =>
       _$$TweetImplFromJson(json);
@@ -145,10 +181,14 @@ class _$TweetImpl implements _Tweet {
   final int userId;
   @override
   final DateTime createdAt;
+  @override
+  final User? user;
+  @override
+  final bool? like;
 
   @override
   String toString() {
-    return 'Tweet(id: $id, content: $content, userId: $userId, createdAt: $createdAt)';
+    return 'Tweet(id: $id, content: $content, userId: $userId, createdAt: $createdAt, user: $user, like: $like)';
   }
 
   @override
@@ -160,12 +200,15 @@ class _$TweetImpl implements _Tweet {
             (identical(other.content, content) || other.content == content) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.user, user) || other.user == user) &&
+            (identical(other.like, like) || other.like == like));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, content, userId, createdAt);
+  int get hashCode =>
+      Object.hash(runtimeType, id, content, userId, createdAt, user, like);
 
   @JsonKey(ignore: true)
   @override
@@ -186,7 +229,9 @@ abstract class _Tweet implements Tweet {
       {required final int id,
       required final String content,
       required final int userId,
-      required final DateTime createdAt}) = _$TweetImpl;
+      required final DateTime createdAt,
+      final User? user,
+      final bool? like}) = _$TweetImpl;
 
   factory _Tweet.fromJson(Map<String, dynamic> json) = _$TweetImpl.fromJson;
 
@@ -198,6 +243,10 @@ abstract class _Tweet implements Tweet {
   int get userId;
   @override
   DateTime get createdAt;
+  @override
+  User? get user;
+  @override
+  bool? get like;
   @override
   @JsonKey(ignore: true)
   _$$TweetImplCopyWith<_$TweetImpl> get copyWith =>

@@ -29,8 +29,9 @@ app.post('/tweet', middleware.isAuthenticated, tweetController.writeTweet);
 app.patch('/tweet', middleware.isAuthenticated, tweetController.editTweet);
 app.delete('/tweet', middleware.isAuthenticated, tweetController.deleteTweet);
 
-app.get('/like', middleware.isAuthenticated, likeController.getMyLikes);
+app.get('/like', middleware.isAuthenticated, likeController.getLikes);
 app.post('/like', middleware.isAuthenticated, likeController.doLike);
+app.delete('/like', middleware.isAuthenticated, likeController.cancelLike);
 
 app.listen(app.get('port'), () => {
   console.log(

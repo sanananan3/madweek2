@@ -1,18 +1,44 @@
-const { and, eq, inArray } = require('drizzle-orm');
+const {
+  and,
+  desc,
+  eq,
+  exists,
+  inArray,
+  getTableColumns,
+} = require('drizzle-orm');
 const db = require('../db');
 const schema = require('../schema');
 
-exports.getMyLikes = async (req, res) => {
+exports.getLikes = async (req, res) => {
   try {
     const user_id = req.user.id;
-    const likes = await db
-      .select({ data: schema.likes.tweet_id })
-      .from(schema.likes)
-      .where(eq(schema.likes.user_id, user_id));
+    const { id } = req.body;
     const result = await db
-      .select()
+      .select({
+        ...getTableColumns(schema.tweets),
+        like: exists(
+          db
+            .select({ value: 1 })
+            .from(schema.likes)
+            .where(
+              and(
+                eq(schema.likes.user_id, user_id),
+                eq(schema.likes.tweet_id, schema.tweets.id)
+              )
+            )
+        ),
+      })
       .from(schema.tweets)
-      .where(inArray(schema.tweets.id, likes));
+      .where(
+        inArray(
+          schema.tweets.id,
+          db
+            .select({ data: schema.likes.tweet_id })
+            .from(schema.likes)
+            .where(eq(schema.likes.user_id, id))
+        )
+      )
+      .orderBy(desc(schema.tweets.created_at));
 
     res.status(200).json({ success: true, tweets: result });
   } catch (error) {

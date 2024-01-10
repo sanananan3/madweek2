@@ -6,8 +6,18 @@ part of 'rest_client.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+BaseResponse _$BaseResponseFromJson(Map<String, dynamic> json) => BaseResponse(
+      success: json['success'] as bool,
+    );
+
+Map<String, dynamic> _$BaseResponseToJson(BaseResponse instance) =>
+    <String, dynamic>{
+      'success': instance.success,
+    };
+
 UserRequestBody _$UserRequestBodyFromJson(Map<String, dynamic> json) =>
     UserRequestBody(
+      id: json['id'] as int?,
       userId: json['user_id'] as String?,
       userPw: json['user_pw'] as String?,
       kakaoId: json['kakao_id'] as int?,
@@ -19,6 +29,7 @@ UserRequestBody _$UserRequestBodyFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$UserRequestBodyToJson(UserRequestBody instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'user_id': instance.userId,
       'user_pw': instance.userPw,
       'kakao_id': instance.kakaoId,
@@ -97,24 +108,6 @@ TweetsResponse _$TweetsResponseFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$TweetsResponseToJson(TweetsResponse instance) =>
-    <String, dynamic>{
-      'success': instance.success,
-      'tweets': instance.tweets,
-      'error': instance.error,
-    };
-
-TweetWithUsersResponse _$TweetWithUsersResponseFromJson(
-        Map<String, dynamic> json) =>
-    TweetWithUsersResponse(
-      success: json['success'] as bool,
-      tweets: (json['tweets'] as List<dynamic>?)
-          ?.map((e) => TweetWithUser.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      error: json['error'] as String?,
-    );
-
-Map<String, dynamic> _$TweetWithUsersResponseToJson(
-        TweetWithUsersResponse instance) =>
     <String, dynamic>{
       'success': instance.success,
       'tweets': instance.tweets,
@@ -278,12 +271,12 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<TweetsResponse> getTweetsByUserId(Map<String, dynamic> data) async {
+  Future<TweetsResponse> getTweetsByUserId(UserRequestBody data) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(data);
+    _data.addAll(data.toJson());
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<TweetsResponse>(Options(
       method: 'GET',
@@ -306,13 +299,13 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<TweetWithUsersResponse> getNewTweets() async {
+  Future<TweetsResponse> getNewTweets() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<TweetWithUsersResponse>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<TweetsResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -328,7 +321,7 @@ class _RestClient implements RestClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = TweetWithUsersResponse.fromJson(_result.data!);
+    final value = TweetsResponse.fromJson(_result.data!);
     return value;
   }
 
@@ -413,6 +406,90 @@ class _RestClient implements RestClient {
               baseUrl,
             ))));
     final value = TweetResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<TweetsResponse> getLikesByUserId(UserRequestBody data) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<TweetsResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/like',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = TweetsResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<BaseResponse> doLikeByTweetId(TweetRequestBody data) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<BaseResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/like',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = BaseResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<BaseResponse> cancelLikeByTweetId(TweetRequestBody data) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<BaseResponse>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/like',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = BaseResponse.fromJson(_result.data!);
     return value;
   }
 
