@@ -206,7 +206,13 @@ class ProfileScreen extends ConsumerWidget {
     Tweet tweet,
     int myId,
   ) {
-    return TweetBlock(
+    return Card (
+      margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      color: Color(0xFF1C1E20),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child:
+        TweetBlock(
       tweet: tweet,
       user: user.id != myId ? user : null,
       onEditPressed: () async {
@@ -241,6 +247,9 @@ class ProfileScreen extends ConsumerWidget {
               .deleteTweet(tweet.id);
         }
       },
+    ),
+      ),
     );
+
   }
 }

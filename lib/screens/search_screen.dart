@@ -20,8 +20,9 @@ class SearchScreen extends HookConsumerWidget {
       flags: const YoutubePlayerFlags(mute: true, startAt: 59),
     );
     final isCardFlipped = useState(false);
+
     useRef(
-      Timer.periodic(const Duration(seconds: 1), (timer) {
+      Timer.periodic(const Duration(seconds:0), (timer) {
         isCardFlipped.value = !isCardFlipped.value;
       }),
     );
@@ -31,6 +32,13 @@ class SearchScreen extends HookConsumerWidget {
       (prev, next) => youtubePlayerController.load(next),
     );
 
+    useEffect(() {
+      if (isCardFlipped.value) {
+        Future.delayed(const Duration(seconds: 5), () {
+          isCardFlipped.value = !isCardFlipped.value;
+        });
+      }
+    }, [isCardFlipped.value]);
     return RefreshIndicator(
       onRefresh: () async =>
           ref.read(ytMusicNotifierProvider.notifier).refresh(),
@@ -189,7 +197,7 @@ class SearchScreen extends HookConsumerWidget {
           ),
           const SizedBox(height: 20),
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 900),
+            duration: const Duration(milliseconds: 1000),
             child: isCardFlipped.value
                 ? SizedBox(
                     height: 30,
@@ -247,52 +255,52 @@ class SearchScreen extends HookConsumerWidget {
           ),
           const SizedBox(height: 20),
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 1100),
+            duration: const Duration(milliseconds: 1000),
             child: isCardFlipped.value
                 ? SizedBox(
-                    height: 30,
-                    width: 400,
-                    child: Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.rotationY(pi * 180), // Flip the card
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blue, // Adjust the color as needed
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            '    대설주의보',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : SizedBox(
-                    height: 30,
-                    width: 400,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.blue, // Adjust the color as needed
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          '    잇츠라이브',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+              height: 30,
+              width: 400,
+              child: Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.rotationY(pi * 180), // Flip the card
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue, // Adjust the color as needed
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      '    대설주의보',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
+                ),
+              ),
+            )
+                : SizedBox(
+              height: 30,
+              width: 400,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.blue, // Adjust the color as needed
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Center(
+                  child: Text(
+                    '    잇츠라이브',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
           const SizedBox(height: 20),
           const Text(
@@ -363,7 +371,7 @@ class SearchScreen extends HookConsumerWidget {
           ),
           const SizedBox(height: 20),
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 900),
+            duration: const Duration(milliseconds:1000),
             child: isCardFlipped.value
                 ? SizedBox(
                     height: 30,
