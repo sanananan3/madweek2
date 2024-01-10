@@ -34,8 +34,7 @@ app.post('/like', middleware.isAuthenticated, likeController.doLike);
 
 app.listen(app.get('port'), () => {
   console.log(
-    '  Server is running at %s:%d in %s mode',
-    os.networkInterfaces()['en0'].find((e) => e.family === 'IPv4').address,
+    '  Server is running at port %d in %s mode',
     app.get('port'),
     app.get('env')
   );
