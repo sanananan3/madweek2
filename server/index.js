@@ -2,17 +2,15 @@ require('dotenv').config();
 require('./db');
 
 const middleware = require('./middleware');
+const likeController = require('./controllers/like');
 const tweetController = require('./controllers/tweet');
 const userController = require('./controllers/user');
-const searchController = require('./controllers/search');
-
 
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const express = require('express');
+const os = require('os');
 const app = express();
-
-
 
 app.set('port', process.env.PORT || 8000);
 app.use(compression());
@@ -23,20 +21,21 @@ app.post('/register', userController.register);
 app.post('/register/kakao', userController.registerKakao);
 app.post('/login', userController.login);
 app.post('/verify', userController.verify);
+app.post('/search', userController.search);
 
-app.post('/tweet', middleware.isAuthenticated, tweetController.getTweet);
-app.post('/tweet/my', middleware.isAuthenticated, tweetController.getMyTweet);
-app.post(
-  '/tweet/write',
-  middleware.isAuthenticated,
-  tweetController.writeTweet
-);
+app.get('/tweet', middleware.isAuthenticated, tweetController.getTweets);
+app.get('/tweet/new', middleware.isAuthenticated, tweetController.getNewTweets);
+app.post('/tweet', middleware.isAuthenticated, tweetController.writeTweet);
+app.patch('/tweet', middleware.isAuthenticated, tweetController.editTweet);
+app.delete('/tweet', middleware.isAuthenticated, tweetController.deleteTweet);
 
-app.post('/search', searchController.getSearch);
+app.get('/like', middleware.isAuthenticated, likeController.getMyLikes);
+app.post('/like', middleware.isAuthenticated, likeController.doLike);
 
 app.listen(app.get('port'), () => {
   console.log(
-    '  Server is running at http://localhost:%d in %s mode',
+    '  Server is running at %s:%d in %s mode',
+    os.networkInterfaces()['en0'].find((e) => e.family === 'IPv4').address,
     app.get('port'),
     app.get('env')
   );

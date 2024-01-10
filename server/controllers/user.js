@@ -1,4 +1,4 @@
-const { eq, sql } = require('drizzle-orm');
+const { eq, ilike, or, sql } = require('drizzle-orm');
 
 const bcrypt = require('bcrypt');
 const cookie = require('cookie-signature');
@@ -130,6 +130,33 @@ exports.verify = async (req, res) => {
     }
 
     res.status(200).json({ success: true, user: signUser(result[0]) });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+exports.search = async (req, res) => {
+  try {
+    const { search } = req.body;
+
+    if (!search || search.length < 2) {
+      return res
+        .status(400)
+        .json({ success: false, error: '검색어는 2글자 이상이어야 합니다.' });
+    }
+
+    const result = await db
+      .select()
+      .from(schema.users)
+      .where(
+        or(
+          ilike(schema.users.user_id, `%${search}%`),
+          ilike(schema.users.name, `%${search}%`),
+          ilike(schema.users.phone, `%${search}%`)
+        )
+      );
+
+    res.status(200).json({ success: true, users: result });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

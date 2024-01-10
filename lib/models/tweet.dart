@@ -1,22 +1,18 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'tweet.freezed.dart';
 
 part 'tweet.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
-class Tweet {
-  final int id;
-  final String content;
-  final int userId;
-  final DateTime createdAt;
-
-  const Tweet({
-    required this.id,
-    required this.content,
-    required this.userId,
-    required this.createdAt,
-  });
+@freezed
+class Tweet with _$Tweet {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory Tweet({
+    required int id,
+    required String content,
+    required int userId,
+    required DateTime createdAt,
+  }) = _Tweet;
 
   factory Tweet.fromJson(Map<String, dynamic> json) => _$TweetFromJson(json);
-
-  Map<String, dynamic> toJson() => _$TweetToJson(this);
 }

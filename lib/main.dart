@@ -48,10 +48,19 @@ class MyApp extends ConsumerWidget {
       ),
       useMaterial3: true,
       visualDensity: VisualDensity.adaptivePlatformDensity,
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
+      ),
       dialogTheme: const DialogTheme(
         actionsPadding: EdgeInsets.all(8),
       ),
-      dividerTheme: const DividerThemeData(color: Colors.white70),
+      dividerTheme: const DividerThemeData(
+        color: Colors.white70,
+        space: 1,
+        thickness: 0,
+      ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           shape: RoundedRectangleBorder(

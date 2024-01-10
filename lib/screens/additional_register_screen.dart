@@ -24,7 +24,8 @@ class AdditionalRegisterScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final nameController = useTextEditingController();
+    final nameController =
+        useTextEditingController(text: data['name'] as String?);
     final phoneController = useTextEditingController();
     final birthDateController = useTextEditingController();
 
