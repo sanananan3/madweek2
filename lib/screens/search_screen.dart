@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:madcamp_week2/hooks/youtube_player_controller.dart';
 import 'package:madcamp_week2/providers/rest_client.dart';
@@ -14,6 +18,12 @@ class SearchScreen extends HookConsumerWidget {
     final youtubePlayerController = useYoutubePlayerController(
       initialVideoId: ref.read(ytMusicNotifierProvider),
       flags: const YoutubePlayerFlags(mute: true, startAt: 59),
+    );
+    final isCardFlipped = useState(false);
+    useRef(
+      Timer.periodic(const Duration(seconds: 1), (timer) {
+        isCardFlipped.value = !isCardFlipped.value;
+      }),
     );
 
     ref.listen(
@@ -110,6 +120,297 @@ class SearchScreen extends HookConsumerWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+          const SizedBox(height: 20),
+          const Text(
+            '    대한민국에서 트렌드 중',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white70,
+              fontWeight: FontWeight.w100,
+            ),
+          ),
+          const SizedBox(height: 20),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 1000),
+            child: isCardFlipped.value
+                ? SizedBox(
+                    height: 30,
+                    width: 400,
+                    child: Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(pi * 180), // Flip the card
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue, // Adjust the color as needed
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '    과자파티',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : SizedBox(
+                    height: 30,
+                    width: 400,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue, // Adjust the color as needed
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '    제주항공',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            '    Only on X 실시간 트렌드',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white70,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+          const SizedBox(height: 20),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 900),
+            child: isCardFlipped.value
+                ? SizedBox(
+                    height: 30,
+                    width: 400,
+                    child: Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(pi * 180), // Flip the card
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue, // Adjust the color as needed
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '    솔로지옥',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : SizedBox(
+                    height: 30,
+                    width: 400,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue, // Adjust the color as needed
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '    환승연애',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            '    대한민국에서 트렌드 중',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white70,
+              fontWeight: FontWeight.w100,
+            ),
+          ),
+          const SizedBox(height: 20),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 1100),
+            child: isCardFlipped.value
+                ? SizedBox(
+                    height: 30,
+                    width: 400,
+                    child: Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(pi * 180), // Flip the card
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue, // Adjust the color as needed
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '    대설주의보',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : SizedBox(
+                    height: 30,
+                    width: 400,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue, // Adjust the color as needed
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '    잇츠라이브',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            '    대한민국에서 트렌드 중',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white70,
+              fontWeight: FontWeight.w100,
+            ),
+          ),
+          const SizedBox(height: 20),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 1000),
+            child: isCardFlipped.value
+                ? SizedBox(
+                    height: 30,
+                    width: 400,
+                    child: Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(pi * 180), // Flip the card
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue, // Adjust the color as needed
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '    누나 잠들면 안대',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : SizedBox(
+                    height: 30,
+                    width: 400,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue, // Adjust the color as needed
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '    #LALISA',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            '    패션, 뷰티 실시간 트렌드',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white70,
+              fontWeight: FontWeight.w100,
+            ),
+          ),
+          const SizedBox(height: 20),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 900),
+            child: isCardFlipped.value
+                ? SizedBox(
+                    height: 30,
+                    width: 400,
+                    child: Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(pi * 180), // Flip the card
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue, // Adjust the color as needed
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '    쌍계피지떡',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : SizedBox(
+                    height: 30,
+                    width: 400,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue, // Adjust the color as needed
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '    좌석 추첨',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+          ),
+          const SizedBox(height: 40),
         ],
       ),
     );
