@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:madcamp_week2/providers//user.dart';
+import 'package:madcamp_week2/models/user.dart';
+import 'package:madcamp_week2/providers/tweet.dart';
 import 'package:madcamp_week2/rest_client.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:http/http.dart' as http;
+import 'package:madcamp_week2/screens/userprofile.dart';
 
 
 class Tab2 extends StatefulWidget {
@@ -18,6 +21,8 @@ class Tab2 extends StatefulWidget {
 }
 
 class _SearchBarAppState extends State<Tab2> {
+
+
 
   late SearchController _searchController;
 
@@ -92,7 +97,7 @@ class _SearchBarAppState extends State<Tab2> {
                     onChanged: (String query) {
 
                     },
-                    onTap:() async {
+                    onSubmitted:(String query) async {
 
                     try {
                       final response = await restClient.searchUsers({
@@ -107,15 +112,23 @@ class _SearchBarAppState extends State<Tab2> {
                         final user = response.user!;
 
                         print('지금 !! User found: $user');
+                        _openUserProfilePage(user);
 
                       } else {
                         print ('지금!!! user not found ');
+                        _shownotfoundDialog();
                       }
                     } catch(error) {
                       print('지금!! 걍 catch로 유저 서치 에러남 $error');
+                      _shownotfoundDialog();
                     }
 
+
+                    _searchController.clear();
+
+
                     },
+
                     leading: const Icon(Icons.search),
                     trailing: <Widget>[
                       Tooltip(
@@ -166,5 +179,57 @@ class _SearchBarAppState extends State<Tab2> {
         ),
 
           );
+  }
+
+  void _openUserProfilePage(User user) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => UserProfilePage(user: user)),
+    );
+  }
+
+
+  void _shownotfoundDialog(){
+
+    showDialog(
+
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            title: Text('           사용자를 찾을 수 없습니다', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold ,)),
+            backgroundColor: Color(0xFF1DA1F2),
+
+            content: Column (
+              crossAxisAlignment:  CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
+                SizedBox(height: 20),
+                Text('유효한 인물이나 토픽 또는 키워드를 검색해 보세요', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)
+                ),
+              ],
+            ),
+
+            actions:[
+              TextButton(
+
+                onPressed: () {
+                  Navigator.of(context).pop();
+
+                },
+                style: TextButton.styleFrom(
+                minimumSize: Size(40,30),
+                ),
+                child: Text('확인', style: TextStyle(fontSize: 11)),
+              ),
+            ],
+          );
+        }
+
+    );
   }
 }
