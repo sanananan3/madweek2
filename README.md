@@ -94,6 +94,8 @@ Server: Node.js
 
 <img src = "https://github.com/sanananan3/madweek2/assets/127393132/e6687889-388d-4921-b829-496ec04d6c7d" width = 20%, height = 20%>
 
+
+<br>
 회원가입이 되어 있는 사용자의 경우에는 바로 로그인으로 넘어갈 수 있다. 
 
  
@@ -103,6 +105,8 @@ Server: Node.js
 
  
 로그인을 완료한 사용자의 프로필 페이지가 나온다. 
+<br> 
+
 
 <aside>
 💡 포스팅
