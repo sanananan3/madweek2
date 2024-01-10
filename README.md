@@ -53,23 +53,29 @@ Server: Node.js
 
  카카오와 자체 로그인 모두 추가적인 사용자 정보를 얻고 있는데, 그 과정에서 name과 phone, birth_date를 입력해야 한다. created_at 컬럼은 가입한 날짜로써, 데이터가 추가될 때 자동으로 local time이 지정된다. 
 
-![애플리케이션을 실행하면 로그인 화면이 뜸](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/7d963c92-4f3f-4209-b2cd-ba6a074e9d0b/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_185005.png)
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/42353949-0769-4971-9537-1b92c78d4555" width = 20%, height = 20%>
 
 애플리케이션을 실행하면 로그인 화면이 뜸
 
-![회원가입이 되어 있지 않은 사용자의 경우 회원가입을 해야 함 ](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/69ee565a-3d77-4414-b355-36e8aa8559bf/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_185016.png)
+
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/e4b8eb68-7e3e-4c7b-86bc-d43f43e935d0" width = 20%, height = 20%>
 
 회원가입이 되어 있지 않은 사용자의 경우 회원가입을 해야 함 
 
-![아이디와 비밀번호는 지정된 자릿수 이상을 입력해야 회원가입을 할 수 있음 ](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/75876929-bb42-4306-b4af-a4bca433c4fb/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_185054.png)
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/02e153fa-7369-41bd-a73a-cacd28294464" width = 20%, height = 20%>
+
 
 아이디와 비밀번호는 지정된 자릿수 이상을 입력해야 회원가입을 할 수 있음 
 
-![전화번호는 11자리수이며, 생년월일은 8자리여야 함](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/51f7dfa0-46b9-4973-8f13-774b06932fdb/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_185149.png)
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/0f994afc-5eb9-4886-88a0-a70e9bfd0e72" width = 20%, height = 20%>
+
+
 
 전화번호는 11자리수이며, 생년월일은 8자리여야 함
 
-![회원가입에 성공하면 프로필 화면이 뜨게 된다. ](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/3786be0c-d6e5-4248-b2ea-7a455b9faf1d/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_185239.png)
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/3b360d22-9787-429c-9aef-ef9f996f0af4" width = 20%, height = 20%>
+
+
 
 회원가입에 성공하면 프로필 화면이 뜨게 된다. 
 
@@ -84,13 +90,14 @@ Server: Node.js
 
  만약 회원가입이 되어 있는 경우의 사용자라면, 회원가입 버튼을 누르지 않고 바로 로그인으로 넘어갈 수 있다. 
 
-![회원가입이 되어 있는 사용자의 경우에는 바로 로그인으로 넘어갈 수 있다. ](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/29585926-3925-4ed0-adf1-a730112f12d3/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_190640.png)
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/e6687889-388d-4921-b829-496ec04d6c7d" width = 20%, height = 20%>
 
 회원가입이 되어 있는 사용자의 경우에는 바로 로그인으로 넘어갈 수 있다. 
 
  
 
-![로그인을 완료한 사용자의 프로필 페이지가 나온다. ](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/681327b6-3893-400a-b74b-48227d02d2d3/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_190649.png)
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/fbaae0d9-e99d-47cf-9396-aaf6eb5b5fe8" width = 20%, height = 20%>
+
 
 로그인을 완료한 사용자의 프로필 페이지가 나온다. 
 
@@ -99,13 +106,18 @@ Server: Node.js
 
 </aside>
 
-![우측 하단의 + 아이콘을 누를 시에 새로운 포스트를 작성할 수 있다. ](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/9976b30a-f2ab-4822-a4e1-4e2634eba9ff/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_185357.png)
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/6c15f945-c4d1-40fc-91bb-3ae4de67e0b7" width = 20%, height = 20%>
+
+
 
 우측 하단의 + 아이콘을 누를 시에 새로운 포스트를 작성할 수 있다. 
 
-![스크린샷 2024-01-10 191458.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/c5418d35-7aa7-4e90-a5af-eab6880695c7/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_191458.png)
 
-![해당 text field에 자신이 게시하고 싶은 내용을 입력한 후, 게시하기 버튼을 누르면 게시에 성공한다. ](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/77e67e71-9fdd-419a-bbad-d834fb3b437b/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_185416.png)
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/8bb042d4-9f52-4ce8-b0d8-63bf5bc3cab1" width = 20%, height = 20%>
+
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/46de0aab-31dc-4ff4-b5b2-ef7bb2f8ad8f" width = 20%, height = 20%>
+
+
 
 해당 text field에 자신이 게시하고 싶은 내용을 입력한 후, 게시하기 버튼을 누르면 게시에 성공한다. 
 
@@ -120,15 +132,19 @@ Server: Node.js
 
  검색 바에는 애플리케이션에 가입한 사용자의 ID 혹은 이름을 부분적으로 검색하여도 하단에 뜨게 되며 해당 텍스트를 누르게 되면 검색한 사용자의 프로필이 뜬다. 
 
-![유튜브 인기 동영상이 뜸 ](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/9e99fa7e-11e0-462f-af19-c55bd7409d75/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_185550.png)
+
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/e2c7906a-e09f-4766-9be1-aff0526a74cb" width = 20%, height = 20%>
+
+
 
 유튜브 인기 동영상이 뜸 
 
-![애플리케이션에 가입한 사용자의 ID 혹은 이름을 부분적으로 검색하여도 하단에 뜸](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/3e841641-414d-4bd1-9e9f-37ea82803b35/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_185610.png)
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/6b976ac7-e55e-4255-a47f-a70e50b2e777" width = 20%, height = 20%>
 
 애플리케이션에 가입한 사용자의 ID 혹은 이름을 부분적으로 검색하여도 하단에 뜸
 
-![해당 사용자의 프로필이 뜨게 됨](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/beb96e6c-8303-4a3b-8b2b-4d7b6aa640d8/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_185621.png)
+
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/6a59274d-145f-4c42-83a6-c7c1a263c01a" width = 20%, height = 20%>
 
 해당 사용자의 프로필이 뜨게 됨
 
@@ -137,7 +153,11 @@ Server: Node.js
 
 </aside>
 
-![스크린샷 2024-01-10 192603.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/1b3c9d1f-e5fc-4255-9c26-8d3fb30dc339/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_192603.png)
+
+
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/d3ff03cd-896d-4cb0-a30f-2de9dc1d8ace" width = 20%, height = 20%>
+
+
 
 사용자 ‘kickkick’으로 로그인을 하였을 때 메인 탭에는 추천 게시물들이 뜨게 된다. 
 
@@ -153,11 +173,12 @@ Server: Node.js
 
 </aside>
 
-![우측 상단에 있는 로그아웃 버튼 ](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/184138f1-e343-4eee-8595-b94e1d0a9966/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_192824.png)
-
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/53d4707c-1c8c-4b13-b93b-3f57ab996ff3" width = 20%, height = 20%>
 우측 상단에 있는 로그아웃 버튼 
 
-![로그아웃 버튼을 누르게 되면 로그아웃에 대한 다이얼로그가 뜨게 된다. ](https://prod-files-secure.s3.us-west-2.amazonaws.com/f6cb388f-3934-47d6-9928-26d2e10eb0fc/c6d5f7bd-034a-4d86-a809-bf24cefd48ba/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-01-10_185639.png)
+
+<img src = "https://github.com/sanananan3/madweek2/assets/127393132/8ad8b399-0126-4d08-8831-bc890ca21154" width = 20%, height = 20%>
+
 
 로그아웃 버튼을 누르게 되면 로그아웃에 대한 다이얼로그가 뜨게 된다. 
 
