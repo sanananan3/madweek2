@@ -29,10 +29,10 @@ abstract class RestClient {
   Future<UsersResponse> getUsers(@Body() Map<String, dynamic> data);
 
   @GET('/tweet')
-  Future<TweetWithUsersResponse> getTweets();
+  Future<TweetsResponse> getTweetsByUserId(@Body() Map<String, dynamic> data);
 
-  @GET('/tweet/my')
-  Future<TweetsResponse> getMyTweets();
+  @GET('/tweet/new')
+  Future<TweetWithUsersResponse> getNewTweets();
 
   @POST('/tweet')
   Future<TweetResponse> writeTweet(@Body() TweetRequestBody data);

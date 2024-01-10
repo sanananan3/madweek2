@@ -24,7 +24,7 @@ app.post('/verify', userController.verify);
 app.post('/search', userController.search);
 
 app.get('/tweet', middleware.isAuthenticated, tweetController.getTweets);
-app.get('/tweet/my', middleware.isAuthenticated, tweetController.getMyTweets);
+app.get('/tweet/new', middleware.isAuthenticated, tweetController.getNewTweets);
 app.post('/tweet', middleware.isAuthenticated, tweetController.writeTweet);
 app.patch('/tweet', middleware.isAuthenticated, tweetController.editTweet);
 app.delete('/tweet', middleware.isAuthenticated, tweetController.deleteTweet);

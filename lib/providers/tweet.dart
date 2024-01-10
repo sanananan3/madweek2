@@ -6,12 +6,12 @@ import 'package:madcamp_week2/models/tweet.dart';
 import 'package:madcamp_week2/providers/rest_client.dart';
 import 'package:madcamp_week2/rest_client.dart';
 
-class MyTweetsNotifier extends AsyncNotifier<List<Tweet>?> {
+class TweetsNotifier extends AutoDisposeFamilyAsyncNotifier<List<Tweet>?, int> {
   @override
-  FutureOr<List<Tweet>?> build() async {
+  FutureOr<List<Tweet>?> build(int arg) async {
     try {
       final restClient = ref.watch(restClientProvider);
-      final response = await restClient.getMyTweets();
+      final response = await restClient.getTweetsByUserId({'user_id': arg});
       if (response.success) {
         return response.tweets;
       }
@@ -21,7 +21,7 @@ class MyTweetsNotifier extends AsyncNotifier<List<Tweet>?> {
     }
   }
 
-  Future<void> refresh() async => state = AsyncData(await build());
+  Future<void> refresh() async => state = AsyncData(await build(arg));
 
   Future<String?> writeTweet(String content) async {
     try {
@@ -72,14 +72,16 @@ class MyTweetsNotifier extends AsyncNotifier<List<Tweet>?> {
   }
 }
 
-final tweetsProvider = FutureProvider.autoDispose((ref) async {
+final newTweetsProvider = FutureProvider.autoDispose((ref) async {
   final restClient = ref.watch(restClientProvider);
-  final response = await restClient.getTweets();
+  final response = await restClient.getNewTweets();
   if (response.success) {
     return response.tweets;
   }
   return null;
 });
 
-final myTweetsNotifierProvider =
-    AsyncNotifierProvider<MyTweetsNotifier, List<Tweet>?>(MyTweetsNotifier.new);
+final tweetsNotifierProvider =
+    AutoDisposeAsyncNotifierProviderFamily<TweetsNotifier, List<Tweet>?, int>(
+  TweetsNotifier.new,
+);

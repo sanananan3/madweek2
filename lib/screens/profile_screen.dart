@@ -4,17 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:madcamp_week2/models/tweet.dart';
+import 'package:madcamp_week2/models/user.dart';
 import 'package:madcamp_week2/providers/tweet.dart';
 import 'package:madcamp_week2/providers/user.dart';
 import 'package:madcamp_week2/screens/tweet_write_screen.dart';
 import 'package:madcamp_week2/widgets/tweet_block.dart';
 
 class ProfileScreen extends ConsumerWidget {
-  const ProfileScreen({super.key});
+  final User user;
+
+  const ProfileScreen({required this.user, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userNotifierProvider).value!;
+    final myId = ref.watch(userNotifierProvider.select((e) => e.value!.id));
 
     final formattedDate =
         DateFormat('yyyy년 MM월 dd일에 가입함').format(user.createdAt.toLocal());
@@ -22,50 +25,22 @@ class ProfileScreen extends ConsumerWidget {
         DateFormat('yyyy년 MM월 dd일에 태어난').format(user.birthDate.toLocal());
 
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.logout),
-              visualDensity: VisualDensity.standard,
-              onPressed: () async {
-                if (await showDialog<bool>(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        content: const Text('로그아웃하시겠습니까?'),
-                        contentPadding: const EdgeInsets.all(24),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, false),
-                            child: const Text('아니오'),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, true),
-                            child: const Text('네'),
-                          ),
-                        ],
-                      ),
-                    ) ??
-                    false) {
-                  await ref.read(userNotifierProvider.notifier).logout();
-                }
-              },
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            await Navigator.push<void>(
-              context,
-              MaterialPageRoute(
-                builder: (cnotext) => const TweetWriteScreen(),
+        floatingActionButton: user.id != myId
+            ? null
+            : FloatingActionButton(
+                onPressed: () async {
+                  await Navigator.push<void>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (cnotext) => const TweetWriteScreen(),
+                    ),
+                  );
+                },
+                shape: const CircleBorder(),
+                child: const Icon(Icons.add),
               ),
-            );
-          },
-          shape: const CircleBorder(),
-          child: const Icon(Icons.add),
-        ),
         body: Column(
           children: [
             Padding(
@@ -153,67 +128,35 @@ class ProfileScreen extends ConsumerWidget {
               ),
               tabs: [
                 Tab(text: '게시물'),
-                Tab(text: '미디어'),
                 Tab(text: '마음에 들어요'),
               ],
             ),
             Expanded(
               child: TabBarView(
                 children: [
-                  switch (ref.watch(myTweetsNotifierProvider)) {
+                  switch (ref.watch(tweetsNotifierProvider(user.id))) {
                     AsyncData(:final value) when value != null =>
                       RefreshIndicator(
                         onRefresh: () => ref
-                            .read(myTweetsNotifierProvider.notifier)
+                            .read(tweetsNotifierProvider(user.id).notifier)
                             .refresh(),
                         child: ListView.separated(
                           itemCount: value.length,
-                          itemBuilder: (context, index) =>
-                              _buildTweetBlock(context, ref, value[index]),
+                          itemBuilder: (context, index) => _buildTweetBlock(
+                            context,
+                            ref,
+                            value[index],
+                            myId,
+                          ),
                           separatorBuilder: (context, index) => const Divider(),
                         ),
                       ),
-                    AsyncLoading() => ListView.separated(
+                    _ => ListView.separated(
                         itemCount: 5,
                         itemBuilder: (context, index) => const TweetBlock(),
                         separatorBuilder: (context, index) => const Divider(),
                       ),
-                    _ => const SizedBox.shrink(),
                   },
-                  GridView.builder(
-                    itemCount: 1000,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                    ),
-                    itemBuilder: (context, index) {
-                      final number = <int>[
-                        Random().nextInt(255),
-                        Random().nextInt(255),
-                        Random().nextInt(255),
-                      ];
-                      return ColoredBox(
-                        color: Color.fromRGBO(
-                          number[0],
-                          number[1],
-                          number[2],
-                          1,
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Grid View $index',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
                   GridView.builder(
                     itemCount: 1000,
                     gridDelegate:
@@ -257,9 +200,15 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTweetBlock(BuildContext context, WidgetRef ref, Tweet tweet) {
+  Widget _buildTweetBlock(
+    BuildContext context,
+    WidgetRef ref,
+    Tweet tweet,
+    int myId,
+  ) {
     return TweetBlock(
       tweet: tweet,
+      user: user.id != myId ? user : null,
       onEditPressed: () async {
         await Navigator.push<void>(
           context,
@@ -288,7 +237,7 @@ class ProfileScreen extends ConsumerWidget {
             ) ??
             false) {
           await ref
-              .read(myTweetsNotifierProvider.notifier)
+              .read(tweetsNotifierProvider(user.id).notifier)
               .deleteTweet(tweet.id);
         }
       },

@@ -8,23 +8,21 @@ class RecommendScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: switch (ref.watch(tweetsProvider)) {
-        AsyncData(:final value) when value != null => ListView.separated(
-            itemCount: value.length,
-            itemBuilder: (context, index) => TweetBlock(
-              tweet: value[index].tweet,
-              user: value[index].user,
-            ),
-            separatorBuilder: (context, index) => const Divider(),
+    return switch (ref.watch(newTweetsProvider)) {
+      AsyncData(:final value) when value != null => ListView.separated(
+          itemCount: value.length,
+          itemBuilder: (context, index) => TweetBlock(
+            tweet: value[index].tweet,
+            user: value[index].user,
+            onLikePressed: () async {},
           ),
-        _ => ListView.separated(
-            itemCount: 10,
-            itemBuilder: (context, index) => const TweetBlock(),
-            separatorBuilder: (context, index) => const Divider(),
-          ),
-      },
-    );
+          separatorBuilder: (context, index) => const Divider(),
+        ),
+      _ => ListView.separated(
+          itemCount: 10,
+          itemBuilder: (context, index) => const TweetBlock(),
+          separatorBuilder: (context, index) => const Divider(),
+        ),
+    };
   }
 }

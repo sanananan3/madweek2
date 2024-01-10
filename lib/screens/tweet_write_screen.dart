@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:madcamp_week2/models/tweet.dart';
 import 'package:madcamp_week2/providers/tweet.dart';
+import 'package:madcamp_week2/providers/user.dart';
 
 class TweetWriteScreen extends HookConsumerWidget {
   final Tweet? tweet;
@@ -13,6 +14,7 @@ class TweetWriteScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final errorText = useState<String?>(null);
     final contentController = useTextEditingController(text: tweet?.content);
+    final userId = ref.watch(userNotifierProvider.select((e) => e.value!.id));
 
     return Scaffold(
       appBar: AppBar(
@@ -61,10 +63,10 @@ class TweetWriteScreen extends HookConsumerWidget {
                     onPressed: () async {
                       final result = switch (tweet) {
                         Tweet(:final id) => await ref
-                            .read(myTweetsNotifierProvider.notifier)
+                            .read(tweetsNotifierProvider(userId).notifier)
                             .editTweet(id, contentController.text),
                         _ => await ref
-                            .read(myTweetsNotifierProvider.notifier)
+                            .read(tweetsNotifierProvider(userId).notifier)
                             .writeTweet(contentController.text),
                       };
 

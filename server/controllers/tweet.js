@@ -5,6 +5,21 @@ const schema = require('../schema');
 
 exports.getTweets = async (req, res) => {
   try {
+    const { user_id } = req.body;
+    const result = await db
+      .select()
+      .from(schema.tweets)
+      .where(eq(schema.tweets.user_id, user_id))
+      .orderBy(desc(schema.tweets.created_at));
+
+    res.status(200).json({ success: true, tweets: result });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+exports.getNewTweets = async (req, res) => {
+  try {
     const user_id = req.user.id;
     const result = await db
       .select({
@@ -22,21 +37,6 @@ exports.getTweets = async (req, res) => {
   }
 };
 
-exports.getMyTweets = async (req, res) => {
-  try {
-    const user_id = req.user.id;
-    const result = await db
-      .select()
-      .from(schema.tweets)
-      .where(eq(schema.tweets.user_id, user_id))
-      .orderBy(desc(schema.tweets.created_at));
-
-    res.status(200).json({ success: true, tweets: result });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
-};
-
 exports.writeTweet = async (req, res) => {
   try {
     const user_id = req.user.id;
@@ -45,7 +45,7 @@ exports.writeTweet = async (req, res) => {
     const result = await db
       .insert(schema.tweets)
       .values({
-        content,
+        content: content.trim(),
         user_id,
       })
       .returning();
@@ -83,7 +83,7 @@ exports.editTweet = async (req, res) => {
 
     await db
       .update(schema.tweets)
-      .set({ content })
+      .set({ content: content.trim() })
       .where(eq(schema.tweets.id, id));
 
     res.status(200).json({

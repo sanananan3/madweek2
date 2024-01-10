@@ -278,13 +278,14 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<TweetWithUsersResponse> getTweets() async {
+  Future<TweetsResponse> getTweetsByUserId(Map<String, dynamic> data) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<TweetWithUsersResponse>(Options(
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<TweetsResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -300,25 +301,25 @@ class _RestClient implements RestClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = TweetWithUsersResponse.fromJson(_result.data!);
+    final value = TweetsResponse.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<TweetsResponse> getMyTweets() async {
+  Future<TweetWithUsersResponse> getNewTweets() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<TweetsResponse>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<TweetWithUsersResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/tweet/my',
+              '/tweet/new',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -327,7 +328,7 @@ class _RestClient implements RestClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = TweetsResponse.fromJson(_result.data!);
+    final value = TweetWithUsersResponse.fromJson(_result.data!);
     return value;
   }
 

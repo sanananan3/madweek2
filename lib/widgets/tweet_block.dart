@@ -7,14 +7,18 @@ import 'package:shimmer/shimmer.dart';
 class TweetBlock extends StatelessWidget {
   final Tweet? tweet;
   final User? user;
+  final bool? liked;
   final VoidCallback? onPressed;
+  final VoidCallback? onLikePressed;
   final VoidCallback? onEditPressed;
   final VoidCallback? onDeletePressed;
 
   const TweetBlock({
     this.tweet,
     this.user,
+    this.liked,
     this.onPressed,
+    this.onLikePressed,
     this.onEditPressed,
     this.onDeletePressed,
     super.key,
@@ -25,10 +29,12 @@ class TweetBlock extends StatelessWidget {
     return InkWell(
       onTap: onPressed ?? () {},
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 8, 4, 16),
+        padding: const EdgeInsets.fromLTRB(12, 12, 4, 16),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (user != null) const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -39,6 +45,7 @@ class TweetBlock extends StatelessWidget {
                     child: Container(
                       width: 100,
                       height: 16,
+                      margin: const EdgeInsets.only(right: 8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(2),
                         color: Colors.white,
@@ -98,7 +105,7 @@ class TweetBlock extends StatelessWidget {
                   highlightColor: Colors.blueGrey.shade900,
                   child: Container(
                     height: 14,
-                    margin: const EdgeInsets.only(top: 8),
+                    margin: const EdgeInsets.only(top: 8, right: 8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(2),
                       color: Colors.white,
@@ -110,6 +117,17 @@ class TweetBlock extends StatelessWidget {
               Text(
                 tweet!.content,
                 style: const TextStyle(fontSize: 15),
+              ),
+            if (user != null)
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  onPressed: onLikePressed,
+                  icon: (liked != null && liked!)
+                      ? const Icon(Icons.favorite)
+                      : const Icon(Icons.favorite_outline),
+                  iconSize: 20,
+                ),
               ),
           ],
         ),
